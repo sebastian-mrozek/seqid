@@ -1,0 +1,5 @@
+rootProject.name = 'id-server'
+
+include 'service'
+include 'api'
+

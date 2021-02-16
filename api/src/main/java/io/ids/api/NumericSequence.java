@@ -4,12 +4,12 @@ public class NumericSequence {
 
     private final String id;
     private final NumericSequenceDefinition sequenceDefinition;
-    private final long current;
+    private final long lastValue;
 
-    public NumericSequence(String id, NumericSequenceDefinition sequenceDefinition, long current) {
+    public NumericSequence(String id, NumericSequenceDefinition sequenceDefinition, long lastValue) {
         this.id = id;
         this.sequenceDefinition = sequenceDefinition;
-        this.current = current;
+        this.lastValue = lastValue;
     }
 
     public String getId() {
@@ -20,7 +20,7 @@ public class NumericSequence {
         return sequenceDefinition;
     }
 
-    public long getNext() {
-        return current;
+    public long getLastValue() {
+        return lastValue;
     }
 }

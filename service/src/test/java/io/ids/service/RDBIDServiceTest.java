@@ -3,20 +3,23 @@ package io.ids.service;
 import io.ids.api.IIDService;
 import io.ids.api.NumericSequence;
 import io.ids.api.NumericSequenceDefinition;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RDBIDServiceTest {
 
-    IIDService idService = RDBIDService.newInstance();
+    private final IIDService idService = RDBIDService.newInstance();
 
-    @AfterEach
+    @After
     public void cleanup() {
-        new io.ids.service.db.query.QDSequenceDefinition().delete();
+        new io.ids.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
+            idService.deleteSequence(dSequenceDefinition.getId().toString());
+        });
     }
 
     @Test
@@ -30,13 +33,15 @@ public class RDBIDServiceTest {
 
     @Test
     public void testNext() {
-        String id = idService.createSequence(new NumericSequenceDefinition("ns2", "seq5", -1)).getId();
+        String id = idService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11)).getId();
 
-        LongStream.of(-1, 0, 1, 2).forEach(expectedNext -> {
+        AtomicLong lastValue = new AtomicLong(11);
+        LongStream.of(11, 12, 13, 14).forEach(expectedNext -> {
             NumericSequence sequence = idService.getSequence(id);
+            assertSequence(sequence, "ns2", "seq5", 11, lastValue.get());
             long nextValue = idService.increment(sequence.getId());
-            assertEquals(expectedNext, nextValue);
-            assertSequence(sequence, "ns2", "seq5", -1, expectedNext);
+            assertEquals(expectedNext, nextValue, "Incremented value");
+            lastValue.set(nextValue);
         });
     }
 
@@ -52,7 +57,7 @@ public class RDBIDServiceTest {
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            NumericSequence actualSequence = idService.getSequence("ns3", "seq123");
+            idService.getSequence("ns3", "seq123");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -71,12 +76,12 @@ public class RDBIDServiceTest {
         idService.increment(id);
         idService.increment(id);
         long currentValue = idService.increment(id);
-        assertEquals(12348, currentValue);
+        assertEquals(12348, currentValue, "after 3 increments");
 
         idService.resetSequence(id);
         NumericSequence sequence = idService.getSequence(id);
-        assertEquals(12345, sequence.getNext());
-        assertEquals(12345, idService.increment(id));
+        assertEquals(12345, sequence.getLastValue(), "last value");
+        assertEquals(12345, idService.increment(id), "incremented 1st time after reset");
     }
 
     @Test
@@ -85,20 +90,20 @@ public class RDBIDServiceTest {
 
         idService.resetSequence(id, 98765);
         NumericSequence sequence = idService.getSequence(id);
-        assertEquals(98765, sequence.getNext());
-        assertEquals(98765, idService.increment(id));
-        assertEquals(98766, idService.increment(id));
-        assertEquals(98767, idService.increment(id));
+        assertEquals(98765, sequence.getLastValue(), "last value");
+        assertEquals(98765, idService.increment(id), "incremented 1st time");
+        assertEquals(98766, idService.increment(id), "incremented 2nd time");
+        assertEquals(98767, idService.increment(id), "incremented 3rd time");
     }
 
-    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, long next) {
+    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, long lastValue) {
         assertNotNull(sequence);
-        assertEquals(next, sequence.getNext());
+        assertEquals(lastValue, sequence.getLastValue(), "last value");
 
         NumericSequenceDefinition sequenceDefinition = sequence.getSequenceDefinition();
         assertNotNull(sequenceDefinition);
-        assertEquals(namespace, sequenceDefinition.getNamespace());
-        assertEquals(name, sequenceDefinition.getName());
-        assertEquals(start, sequenceDefinition.getStart());
+        assertEquals(namespace, sequenceDefinition.getNamespace(), "namespace");
+        assertEquals(name, sequenceDefinition.getName(), "name");
+        assertEquals(start, sequenceDefinition.getStart(), "start");
     }
 }

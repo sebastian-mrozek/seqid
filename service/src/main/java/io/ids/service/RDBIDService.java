@@ -1,5 +1,7 @@
 package io.ids.service;
 
+import io.ebean.DB;
+import io.ebean.annotation.Platform;
 import io.ebean.annotation.Transactional;
 import io.ids.api.IIDService;
 import io.ids.api.NumericSequence;
@@ -14,15 +16,17 @@ import java.util.UUID;
 public class RDBIDService implements IIDService {
 
     private final SequenceMapper mapper;
-    private final Sequencer sequencer;
+    private final ISequencer sequencer;
 
-    public static IIDService newInstance() {
-        return new RDBIDService(new SequenceMapper(), new Sequencer());
-    }
-
-    public RDBIDService(SequenceMapper mapper, Sequencer sequencer) {
+    private RDBIDService(SequenceMapper mapper, ISequencer sequencer) {
         this.mapper = mapper;
         this.sequencer = sequencer;
+    }
+
+    public static IIDService newInstance() {
+        Platform platform = DB.getDefault().getPlatform();
+        Sequencer sequencer = Sequencer.forPlatform(platform);
+        return new RDBIDService(new SequenceMapper(), sequencer);
     }
 
     @Transactional

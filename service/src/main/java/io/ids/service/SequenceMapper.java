@@ -16,7 +16,7 @@ public class SequenceMapper {
                 definition.getStart());
     }
 
-    public NumericSequence toApi(DSequenceDefinition dbSequence, long currentValue) {
+    public NumericSequence toApi(DSequenceDefinition dbSequence, long lastValue) {
         if (dbSequence == null) {
             return null;
         }
@@ -29,6 +29,6 @@ public class SequenceMapper {
         return new NumericSequence(
                 dbSequence.getId().toString(),
                 sequenceDefinition,
-                currentValue);
+                lastValue);
     }
 }

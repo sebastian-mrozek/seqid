@@ -9,14 +9,16 @@ public class SequenceQueryProvider {
 
     private final String createQuery;
     private final String dropQuery;
-    private final String incrementQuery;
-    private final String selectQuery;
+    private final String nextValueQuery;
+    private final String currentValueQuery;
+    private final String currentValueInfoSchemaQuery;
 
-    private SequenceQueryProvider(String createQuery, String dropQuery, String incrementQuery, String selectQuery) {
+    private SequenceQueryProvider(String createQuery, String dropQuery, String nextValueQuery, String currentValueQuery, String currentValueInfoSchemaQuery) {
         this.createQuery = createQuery;
         this.dropQuery = dropQuery;
-        this.incrementQuery = incrementQuery;
-        this.selectQuery = selectQuery;
+        this.nextValueQuery = nextValueQuery;
+        this.currentValueQuery = currentValueQuery;
+        this.currentValueInfoSchemaQuery = currentValueInfoSchemaQuery;
     }
 
     public String getCreateQuery(UUID id, long start) {
@@ -27,12 +29,16 @@ public class SequenceQueryProvider {
         return String.format(this.dropQuery, id);
     }
 
-    public String getIncrementQuery(UUID id) {
-        return String.format(this.incrementQuery, id);
+    public String getNextValueQuery(UUID id) {
+        return String.format(this.nextValueQuery, id);
     }
 
-    public String getSelectQuery(UUID id) {
-        return String.format(this.selectQuery, id);
+    public String getCurrentValueQuery(UUID id) {
+        return String.format(this.currentValueQuery, id);
+    }
+
+    public String getCurrentValueInfoSchemaQuery(UUID id) {
+        return String.format(this.currentValueInfoSchemaQuery, id);
     }
 
     public static SequenceQueryProvider postgres() {
@@ -40,7 +46,8 @@ public class SequenceQueryProvider {
                 "CREATE SEQUENCE \"%s\" INCREMENT 1 START %s;",
                 "DROP SEQUENCE \"%s\";",
                 "SELECT nextval('%s');",
-                "SELECT \"last_value\" FROM \"%s\";");
+                "SELECT \"last_value\" FROM \"%s\";",
+                null);
     }
 
     public static SequenceQueryProvider h2() {
@@ -48,7 +55,8 @@ public class SequenceQueryProvider {
                 "CREATE SEQUENCE \"%s\" INCREMENT 1 START %s;",
                 "DROP SEQUENCE \"%s\";",
                 "SELECT NEXT VALUE FOR \"%s\";",
-                "SELECT CURRENT VALUE FOR \"%s\"");
+                "SELECT CURRENT VALUE FOR \"%s\"",
+                "SELECT CURRENT_VALUE + INCREMENT FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_NAME='%s';");
     }
 
     public static SequenceQueryProvider forPlatform(Platform platform) {

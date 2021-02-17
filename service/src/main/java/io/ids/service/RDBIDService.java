@@ -25,7 +25,7 @@ public class RDBIDService implements IIDService {
 
     public static IIDService newInstance() {
         Platform platform = DB.getDefault().getPlatform();
-        Sequencer sequencer = Sequencer.forPlatform(platform);
+        ISequencer sequencer = SequencerFactory.forPlatform(platform);
         return new RDBIDService(new SequenceMapper(), sequencer);
     }
 

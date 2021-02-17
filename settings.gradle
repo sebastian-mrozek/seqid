@@ -1,4 +1,4 @@
-rootProject.name = 'id-server'
+rootProject.name = 'sequence-server'
 
 include 'service'
 include 'api'

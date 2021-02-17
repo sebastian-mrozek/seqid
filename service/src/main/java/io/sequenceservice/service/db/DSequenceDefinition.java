@@ -1,4 +1,4 @@
-package io.ids.service.db;
+package io.sequenceservice.service.db;
 
 import io.ebean.Model;
 import io.ebean.annotation.Index;

@@ -1,8 +1,8 @@
-package io.ids.service;
+package io.sequenceservice.service.db;
 
-import io.ids.api.NumericSequence;
-import io.ids.api.NumericSequenceDefinition;
-import io.ids.service.db.DSequenceDefinition;
+import io.sequenceservice.api.NumericSequence;
+import io.sequenceservice.api.NumericSequenceDefinition;
+import io.sequenceservice.service.db.DSequenceDefinition;
 
 public class SequenceMapper {
     public DSequenceDefinition toDb(NumericSequenceDefinition definition) {

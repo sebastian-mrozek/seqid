@@ -1,8 +1,8 @@
-package io.ids.service;
+package io.sequenceservice.service;
 
-import io.ids.api.IIDService;
-import io.ids.api.NumericSequence;
-import io.ids.api.NumericSequenceDefinition;
+import io.sequenceservice.api.ISequenceService;
+import io.sequenceservice.api.NumericSequence;
+import io.sequenceservice.api.NumericSequenceDefinition;
 import org.junit.After;
 import org.junit.Test;
 
@@ -11,13 +11,13 @@ import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RDBIDServiceTest {
+public class RDBSequenceServiceTest {
 
-    private final IIDService idService = RDBIDService.newInstance();
+    private final ISequenceService idService = RDBSequenceService.newInstance();
 
     @After
     public void cleanup() {
-        new io.ids.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
+        new io.sequenceservice.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
             idService.deleteSequence(dSequenceDefinition.getId().toString());
         });
     }

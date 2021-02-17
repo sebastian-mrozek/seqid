@@ -1,6 +1,6 @@
-package io.ids.api;
+package io.sequenceservice.api;
 
-public interface IIDService {
+public interface ISequenceService {
 
     NumericSequence createSequence(NumericSequenceDefinition sequenceDefinition);
 

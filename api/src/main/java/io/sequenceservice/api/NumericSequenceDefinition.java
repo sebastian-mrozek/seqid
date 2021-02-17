@@ -1,4 +1,4 @@
-package io.ids.api;
+package io.sequenceservice.api;
 
 public class NumericSequenceDefinition {
 

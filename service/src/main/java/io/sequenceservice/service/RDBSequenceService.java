@@ -1,32 +1,35 @@
-package io.ids.service;
+package io.sequenceservice.service;
 
 import io.ebean.DB;
 import io.ebean.annotation.Platform;
 import io.ebean.annotation.Transactional;
-import io.ids.api.IIDService;
-import io.ids.api.NumericSequence;
-import io.ids.api.NumericSequenceDefinition;
-import io.ids.service.db.DSequenceDefinition;
-import io.ids.service.db.query.QDSequenceDefinition;
+import io.sequenceservice.api.ISequenceService;
+import io.sequenceservice.api.NumericSequence;
+import io.sequenceservice.api.NumericSequenceDefinition;
+import io.sequenceservice.service.sequence.ISequencer;
+import io.sequenceservice.service.db.SequenceMapper;
+import io.sequenceservice.service.sequence.SequencerFactory;
+import io.sequenceservice.service.db.DSequenceDefinition;
+import io.sequenceservice.service.db.query.QDSequenceDefinition;
 
 import java.util.Optional;
 import java.util.UUID;
 
 
-public class RDBIDService implements IIDService {
+public class RDBSequenceService implements ISequenceService {
 
     private final SequenceMapper mapper;
     private final ISequencer sequencer;
 
-    private RDBIDService(SequenceMapper mapper, ISequencer sequencer) {
+    private RDBSequenceService(SequenceMapper mapper, ISequencer sequencer) {
         this.mapper = mapper;
         this.sequencer = sequencer;
     }
 
-    public static IIDService newInstance() {
+    public static ISequenceService newInstance() {
         Platform platform = DB.getDefault().getPlatform();
         ISequencer sequencer = SequencerFactory.forPlatform(platform);
-        return new RDBIDService(new SequenceMapper(), sequencer);
+        return new RDBSequenceService(new SequenceMapper(), sequencer);
     }
 
     @Transactional

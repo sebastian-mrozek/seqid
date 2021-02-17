@@ -1,4 +1,4 @@
-package io.ids.service;
+package io.sequenceservice.service.sequence;
 
 import java.util.UUID;
 

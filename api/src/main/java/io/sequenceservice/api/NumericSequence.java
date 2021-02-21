@@ -23,4 +23,13 @@ public class NumericSequence {
     public long getLastValue() {
         return lastValue;
     }
+
+    @Override
+    public String toString() {
+        return "NumericSequence{" +
+                "id='" + id + '\'' +
+                ", sequenceDefinition=" + sequenceDefinition +
+                ", lastValue=" + lastValue +
+                '}';
+    }
 }

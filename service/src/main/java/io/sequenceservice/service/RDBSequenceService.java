@@ -103,7 +103,9 @@ public class RDBSequenceService implements ISequenceService {
 
     @Override
     public long increment(String id) {
-        return sequencer.next(UUID.fromString(id));
+        long value = sequencer.next(UUID.fromString(id));
+        LOG.trace("Sequence id: '{}' incremented to: {}", id, value);
+        return value;
     }
 
     private DSequenceDefinition findSequenceOrThrow(String id) {

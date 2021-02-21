@@ -59,4 +59,14 @@ public class DSequenceDefinition extends Model {
     public void setStart(long start) {
         this.start = start;
     }
+
+    @Override
+    public String toString() {
+        return "DSequenceDefinition{" +
+                "id=" + id +
+                ", namespace='" + namespace + '\'' +
+                ", name='" + name + '\'' +
+                ", start=" + start +
+                '}';
+    }
 }

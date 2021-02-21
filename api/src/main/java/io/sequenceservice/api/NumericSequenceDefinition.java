@@ -23,4 +23,13 @@ public class NumericSequenceDefinition {
     public long getStart() {
         return start;
     }
+
+    @Override
+    public String toString() {
+        return "NumericSequenceDefinition{" +
+                "namespace='" + namespace + '\'' +
+                ", name='" + name + '\'' +
+                ", start=" + start +
+                '}';
+    }
 }

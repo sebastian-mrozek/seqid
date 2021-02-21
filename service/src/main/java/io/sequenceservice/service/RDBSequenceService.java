@@ -11,12 +11,16 @@ import io.sequenceservice.service.db.SequenceMapper;
 import io.sequenceservice.service.sequence.SequencerFactory;
 import io.sequenceservice.service.db.DSequenceDefinition;
 import io.sequenceservice.service.db.query.QDSequenceDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.UUID;
 
 
 public class RDBSequenceService implements ISequenceService {
+
+    public static final Logger LOG = LoggerFactory.getLogger(RDBSequenceService.class);
 
     private final SequenceMapper mapper;
     private final ISequencer sequencer;
@@ -38,13 +42,16 @@ public class RDBSequenceService implements ISequenceService {
         DSequenceDefinition dbSequence = mapper.toDb(sequenceDefinition);
         dbSequence.save();
         sequencer.create(dbSequence.getId(), dbSequence.getStart());
+        LOG.info("Created new sequence: {}", sequenceDefinition);
         return mapper.toApi(dbSequence, dbSequence.getStart());
     }
 
     @Override
     public NumericSequence getSequence(String namespace, String name) {
         DSequenceDefinition dbSequence = findSequenceOrThrow(namespace, name);
-        return mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        NumericSequence numericSequence = mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        LOG.debug("Retrieved sequence by name '{}@{}: {}", name, namespace, numericSequence);
+        return numericSequence;
     }
 
     @Transactional
@@ -52,7 +59,9 @@ public class RDBSequenceService implements ISequenceService {
     public NumericSequence resetSequence(String id) {
         DSequenceDefinition dSequence = findSequenceOrThrow(id);
         sequencer.reset(dSequence.getId(), dSequence.getStart());
-        return mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        NumericSequence numericSequence = mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        LOG.info("Sequence id: '{}' reset: {}", id, numericSequence);
+        return numericSequence;
     }
 
     @Transactional
@@ -60,7 +69,9 @@ public class RDBSequenceService implements ISequenceService {
     public NumericSequence resetSequence(String id, long start) {
         DSequenceDefinition dSequence = findSequenceOrThrow(id);
         sequencer.reset(dSequence.getId(), start);
-        return mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        NumericSequence numericSequence = mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        LOG.info("Sequence id: '{}' reset: {}", id, numericSequence);
+        return numericSequence;
     }
 
     @Transactional
@@ -71,18 +82,23 @@ public class RDBSequenceService implements ISequenceService {
                 .id.eq(uuid)
                 .delete();
         sequencer.delete(uuid);
+        LOG.info("Sequence id: '{}' deleted", id);
     }
 
     @Override
     public NumericSequence getSequence(String id) {
         DSequenceDefinition dbSequence = findSequenceOrThrow(id);
-        return mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        NumericSequence numericSequence = mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        LOG.debug("Retrieved sequence by id: '{}': {}", id, numericSequence);
+        return numericSequence;
     }
 
     @Override
     public long increment(String namespace, String name) {
         NumericSequence sequence = getSequence(namespace, name);
-        return increment(sequence.getId());
+        long value = increment(sequence.getId());
+        LOG.trace("Sequence '{}@{}' incremented to: {}", name, namespace, value);
+        return value;
     }
 
     @Override

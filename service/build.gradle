@@ -23,6 +23,7 @@ dependencies {
 
     implementation project(':api')
 
+    testRuntimeOnly 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.postgresql:postgresql:42.2.6'
     implementation("io.ebean:ebean:$v_ebean")
     implementation("io.ebean:ebean-querybean:$v_ebean")
@@ -33,6 +34,7 @@ dependencies {
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
+    testRuntime 'ch.qos.logback:logback-classic:1.0.13'
 
 }
 

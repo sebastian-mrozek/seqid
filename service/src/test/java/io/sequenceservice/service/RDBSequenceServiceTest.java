@@ -17,7 +17,6 @@ public class RDBSequenceServiceTest {
 
     @AfterEach
     public void cleanup() {
-        System.out.println("aslasa");
         new io.sequenceservice.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
             sequenceService.deleteSequence(dSequenceDefinition.getId().toString());
         });

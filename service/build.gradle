@@ -5,6 +5,9 @@ plugins {
 }
 def v_ebean = '12.6.6'
 
+group 'io.sequenceservice'
+version '1.0-SNAPSHOT'
+
 repositories {
     mavenCentral()
 }
@@ -29,6 +32,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.30'
+
 }
 
 test {

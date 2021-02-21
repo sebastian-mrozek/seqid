@@ -3,8 +3,8 @@ package io.sequenceservice.service;
 import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.LongStream;
@@ -13,33 +13,34 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RDBSequenceServiceTest {
 
-    private final ISequenceService idService = RDBSequenceService.newInstance();
+    private final ISequenceService sequenceService = RDBSequenceService.newInstance();
 
-    @After
+    @AfterEach
     public void cleanup() {
+        System.out.println("aslasa");
         new io.sequenceservice.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
-            idService.deleteSequence(dSequenceDefinition.getId().toString());
+            sequenceService.deleteSequence(dSequenceDefinition.getId().toString());
         });
     }
 
     @Test
     public void testCreateAndGet() {
-        NumericSequence sequence = idService.createSequence(new NumericSequenceDefinition("ns", "seq1", 5));
+        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns", "seq1", 5));
         assertSequence(sequence, "ns", "seq1", 5, 5);
 
-        sequence = idService.getSequence("ns", "seq1");
+        sequence = sequenceService.getSequence("ns", "seq1");
         assertSequence(sequence, "ns", "seq1", 5, 5);
     }
 
     @Test
     public void testNext() {
-        String id = idService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11)).getId();
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11)).getId();
 
         AtomicLong lastValue = new AtomicLong(11);
         LongStream.of(11, 12, 13, 14).forEach(expectedNext -> {
-            NumericSequence sequence = idService.getSequence(id);
+            NumericSequence sequence = sequenceService.getSequence(id);
             assertSequence(sequence, "ns2", "seq5", 11, lastValue.get());
-            long nextValue = idService.increment(sequence.getId());
+            long nextValue = sequenceService.increment(sequence.getId());
             assertEquals(expectedNext, nextValue, "Incremented value");
             lastValue.set(nextValue);
         });
@@ -47,53 +48,53 @@ public class RDBSequenceServiceTest {
 
     @Test
     public void testDelete() {
-        NumericSequence sequence = idService.createSequence(new NumericSequenceDefinition("ns3", "seq123", 999));
+        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq123", 999));
         assertSequence(sequence, "ns3", "seq123", 999, 999);
 
-        idService.deleteSequence(sequence.getId());
+        sequenceService.deleteSequence(sequence.getId());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            idService.getSequence(sequence.getId());
+            sequenceService.getSequence(sequence.getId());
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            idService.getSequence("ns3", "seq123");
+            sequenceService.getSequence("ns3", "seq123");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            idService.increment(sequence.getId());
+            sequenceService.increment(sequence.getId());
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            idService.resetSequence(sequence.getId());
+            sequenceService.resetSequence(sequence.getId());
         });
     }
 
     @Test
     public void testReset() {
-        String id = idService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
-        idService.increment(id);
-        idService.increment(id);
-        idService.increment(id);
-        long currentValue = idService.increment(id);
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
+        sequenceService.increment(id);
+        sequenceService.increment(id);
+        sequenceService.increment(id);
+        long currentValue = sequenceService.increment(id);
         assertEquals(12348, currentValue, "after 3 increments");
 
-        idService.resetSequence(id);
-        NumericSequence sequence = idService.getSequence(id);
+        sequenceService.resetSequence(id);
+        NumericSequence sequence = sequenceService.getSequence(id);
         assertEquals(12345, sequence.getLastValue(), "last value");
-        assertEquals(12345, idService.increment(id), "incremented 1st time after reset");
+        assertEquals(12345, sequenceService.increment(id), "incremented 1st time after reset");
     }
 
     @Test
     public void testResetWithValue() {
-        String id = idService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
 
-        idService.resetSequence(id, 98765);
-        NumericSequence sequence = idService.getSequence(id);
+        sequenceService.resetSequence(id, 98765);
+        NumericSequence sequence = sequenceService.getSequence(id);
         assertEquals(98765, sequence.getLastValue(), "last value");
-        assertEquals(98765, idService.increment(id), "incremented 1st time");
-        assertEquals(98766, idService.increment(id), "incremented 2nd time");
-        assertEquals(98767, idService.increment(id), "incremented 3rd time");
+        assertEquals(98765, sequenceService.increment(id), "incremented 1st time");
+        assertEquals(98766, sequenceService.increment(id), "incremented 2nd time");
+        assertEquals(98767, sequenceService.increment(id), "incremented 3rd time");
     }
 
     private void assertSequence(NumericSequence sequence, String namespace, String name, long start, long lastValue) {

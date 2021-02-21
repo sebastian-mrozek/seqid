@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-group 'org.example'
+group 'io.sequenceservice'
 version '1.0-SNAPSHOT'
 
 repositories {

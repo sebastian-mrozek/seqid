@@ -1,5 +1,7 @@
 package io.sequenceservice.api;
 
+import java.util.Objects;
+
 public class NumericSequenceDefinition {
 
     private final String namespace;
@@ -22,6 +24,19 @@ public class NumericSequenceDefinition {
 
     public long getStart() {
         return start;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumericSequenceDefinition that = (NumericSequenceDefinition) o;
+        return start == that.start && namespace.equals(that.namespace) && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, name, start);
     }
 
     @Override

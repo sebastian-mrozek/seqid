@@ -1,5 +1,7 @@
 package io.sequenceservice.api;
 
+import java.util.Objects;
+
 public class NumericSequence {
 
     private final String id;
@@ -22,6 +24,19 @@ public class NumericSequence {
 
     public long getLastValue() {
         return lastValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumericSequence that = (NumericSequence) o;
+        return lastValue == that.lastValue && id.equals(that.id) && sequenceDefinition.equals(that.sequenceDefinition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, sequenceDefinition, lastValue);
     }
 
     @Override

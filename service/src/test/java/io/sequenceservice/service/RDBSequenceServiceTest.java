@@ -3,9 +3,12 @@ package io.sequenceservice.service;
 import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
+import io.sequenceservice.service.db.query.QDSequenceDefinition;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.LongStream;
 
@@ -17,9 +20,7 @@ public class RDBSequenceServiceTest {
 
     @AfterEach
     public void cleanup() {
-        new io.sequenceservice.service.db.query.QDSequenceDefinition().findEach(dSequenceDefinition -> {
-            sequenceService.deleteSequence(dSequenceDefinition.getId().toString());
-        });
+        new QDSequenceDefinition().delete();
     }
 
     @Test
@@ -94,6 +95,43 @@ public class RDBSequenceServiceTest {
         assertEquals(98765, sequenceService.increment(id), "incremented 1st time");
         assertEquals(98766, sequenceService.increment(id), "incremented 2nd time");
         assertEquals(98767, sequenceService.increment(id), "incremented 3rd time");
+    }
+
+    @Test
+    public void testListDefinitions() {
+        NumericSequenceDefinition d1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1)).getSequenceDefinition();
+        NumericSequenceDefinition d2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2)).getSequenceDefinition();
+        NumericSequenceDefinition d3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3)).getSequenceDefinition();
+        NumericSequenceDefinition d4 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq1", 4)).getSequenceDefinition();
+        NumericSequenceDefinition d5 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq2", 5)).getSequenceDefinition();
+
+        List<NumericSequenceDefinition> allDefinitions = sequenceService.listAllDefinitions();
+        Assertions.assertThat(allDefinitions).containsExactlyInAnyOrder(d1, d2, d3, d4, d5);
+
+        List<NumericSequenceDefinition> ns1Definitions = sequenceService.listDefinitionsByNamespace("ns1");
+        Assertions.assertThat(ns1Definitions).containsExactlyInAnyOrder(d1, d2);
+
+        List<NumericSequenceDefinition> ns2Definitions = sequenceService.listDefinitionsByNamespace("ns2");
+        Assertions.assertThat(ns2Definitions).containsExactlyInAnyOrder(d3);
+
+        List<NumericSequenceDefinition> ns3Definitions = sequenceService.listDefinitionsByNamespace("ns3");
+        Assertions.assertThat(ns3Definitions).containsExactlyInAnyOrder(d4, d5);
+    }
+
+    @Test
+    public void testListSequences() {
+        NumericSequence s1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1));
+        NumericSequence s2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2));
+        NumericSequence s3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3));
+
+        List<NumericSequence> allSequences = sequenceService.listAllSequences();
+        Assertions.assertThat(allSequences).containsExactlyInAnyOrder(s1, s2, s3);
+
+        List<NumericSequence> ns1Sequences = sequenceService.listSequencesByNamespace("ns1");
+        Assertions.assertThat(ns1Sequences).containsExactlyInAnyOrder(s1, s2);
+
+        List<NumericSequence> ns2Sequences = sequenceService.listSequencesByNamespace("ns2");
+        Assertions.assertThat(ns2Sequences).containsExactlyInAnyOrder(s3);
     }
 
     private void assertSequence(NumericSequence sequence, String namespace, String name, long start, long lastValue) {

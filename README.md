@@ -5,4 +5,7 @@ TODO:
 -- allow local file based h2 config
 -- allow remote h2 and postgres config  
 - build simple UI as a separate project
--- host with the web service  
+-- host with the web service
+
+Optional:
+- provide GraphQL API

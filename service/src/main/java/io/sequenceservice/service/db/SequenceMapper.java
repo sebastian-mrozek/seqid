@@ -16,16 +16,19 @@ public class SequenceMapper {
                 definition.getStart());
     }
 
-    public NumericSequence toApi(DSequenceDefinition dbSequence, long lastValue) {
+    public NumericSequenceDefinition toApi(DSequenceDefinition dbSequence) {
         if (dbSequence == null) {
             return null;
         }
 
-        NumericSequenceDefinition sequenceDefinition = new NumericSequenceDefinition(
+        return new NumericSequenceDefinition(
                 dbSequence.getNamespace(),
                 dbSequence.getName(),
                 dbSequence.getStart());
+    }
 
+    public NumericSequence toApi(DSequenceDefinition dbSequence, long lastValue) {
+        NumericSequenceDefinition sequenceDefinition = toApi(dbSequence);
         return new NumericSequence(
                 dbSequence.getId().toString(),
                 sequenceDefinition,

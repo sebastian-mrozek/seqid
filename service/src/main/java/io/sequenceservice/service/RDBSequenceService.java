@@ -6,16 +6,18 @@ import io.ebean.annotation.Transactional;
 import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
-import io.sequenceservice.service.sequence.ISequencer;
-import io.sequenceservice.service.db.SequenceMapper;
-import io.sequenceservice.service.sequence.SequencerFactory;
 import io.sequenceservice.service.db.DSequenceDefinition;
+import io.sequenceservice.service.db.SequenceMapper;
 import io.sequenceservice.service.db.query.QDSequenceDefinition;
+import io.sequenceservice.service.sequence.ISequencer;
+import io.sequenceservice.service.sequence.SequencerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class RDBSequenceService implements ISequenceService {
@@ -106,6 +108,45 @@ public class RDBSequenceService implements ISequenceService {
         long value = sequencer.next(UUID.fromString(id));
         LOG.trace("Sequence id: '{}' incremented to: {}", id, value);
         return value;
+    }
+
+    @Override
+    public List<NumericSequenceDefinition> listAllDefinitions() {
+        return new QDSequenceDefinition()
+                .findList().stream()
+                .map(mapper::toApi)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NumericSequenceDefinition> listDefinitionsByNamespace(String namespace) {
+        return new QDSequenceDefinition()
+                .namespace.eq(namespace)
+                .findList().stream()
+                .map(mapper::toApi)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NumericSequence> listAllSequences() {
+        return new QDSequenceDefinition()
+                .findList().stream()
+                .map(this::toFullSequenceDetails)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NumericSequence> listSequencesByNamespace(String namespace) {
+        return new QDSequenceDefinition()
+                .namespace.eq(namespace)
+                .findList().stream()
+                .map(this::toFullSequenceDetails)
+                .collect(Collectors.toList());
+    }
+
+    private NumericSequence toFullSequenceDetails(DSequenceDefinition dSequenceDefinition) {
+        long current = this.sequencer.getCurrent(dSequenceDefinition.getId());
+        return mapper.toApi(dSequenceDefinition, current);
     }
 
     private DSequenceDefinition findSequenceOrThrow(String id) {

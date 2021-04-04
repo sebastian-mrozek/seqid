@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="dsequence_definition" identityType="external" pkName="pk_dsequence_definition">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="namespace" type="varchar(99)" notnull="true"/>
+            <column name="name" type="varchar(99)" notnull="true"/>
+            <column name="start" type="bigint" notnull="true"/>
+        </createTable>
+        <createIndex indexName="ix_dsequence_definition_namespace_name" tableName="dsequence_definition" columns="namespace,name"/>
+    </changeSet>
+</migration>

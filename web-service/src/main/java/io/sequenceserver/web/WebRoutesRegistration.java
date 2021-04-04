@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WebRoutesRegistration {
 
@@ -14,7 +15,13 @@ public class WebRoutesRegistration {
 
     public static void init(Javalin server) {
         List<WebRoutes> webRoutes = SystemContext.context().getBeans(WebRoutes.class);
-        LOG.info("Found routes: {}", webRoutes);
+        LOG.info("Found routes: {}", getRouteNames(webRoutes));
         server.routes(() -> webRoutes.forEach(WebRoutes::registerRoutes));
+    }
+
+    private static String getRouteNames(List<WebRoutes> webRoutes) {
+        return webRoutes.stream()
+                .map(route -> route.getClass().getSimpleName())
+                .collect(Collectors.joining(","));
     }
 }

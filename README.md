@@ -1,5 +1,5 @@
 TODO:
-- Create javalin/avaje web service
+- test config using external file
 - test H2 as service   
 - USe JIB to create container
   - allow local file based h2 config

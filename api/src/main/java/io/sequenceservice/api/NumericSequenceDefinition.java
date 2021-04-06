@@ -1,5 +1,8 @@
 package io.sequenceservice.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class NumericSequenceDefinition {
@@ -8,7 +11,8 @@ public class NumericSequenceDefinition {
     private final String name;
     private final long start;
 
-    public NumericSequenceDefinition(String namespace, String name, long start) {
+    @JsonCreator
+    public NumericSequenceDefinition(@JsonProperty("namespace") String namespace, @JsonProperty("name") String name, @JsonProperty("start") long start) {
         this.namespace = namespace;
         this.name = name;
         this.start = start;

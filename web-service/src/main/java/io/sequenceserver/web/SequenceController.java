@@ -5,7 +5,7 @@ import io.javalin.http.Context;
 import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
-import io.sequenceservice.service.RDBSequenceService;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class SequenceController {
 
     private final ISequenceService service;
 
-    public SequenceController() {
-        service = RDBSequenceService.newInstance();
-        service.createSequence(new NumericSequenceDefinition("ns", "sequence-" + System.currentTimeMillis(), 1));
+    @Inject
+    public SequenceController(ISequenceService service) {
+        this.service = service;
     }
 
     @Post

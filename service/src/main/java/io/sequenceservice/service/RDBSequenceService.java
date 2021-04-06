@@ -70,6 +70,8 @@ public class RDBSequenceService implements ISequenceService {
     @Override
     public NumericSequence resetSequence(String id, long start) {
         DSequenceDefinition dSequence = findSequenceOrThrow(id);
+        dSequence.setStart(start);
+        dSequence.update();
         sequencer.reset(dSequence.getId(), start);
         NumericSequence numericSequence = mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
         LOG.info("Sequence id: '{}' reset: {}", id, numericSequence);

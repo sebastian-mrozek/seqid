@@ -7,6 +7,7 @@ import io.sequenceservice.api.NumericSequenceDefinition;
 import io.sequenceservice.service.RDBSequenceService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Path("sequence")
@@ -24,26 +25,6 @@ public class SequenceController {
         return service.createSequence(sequenceDefinition);
     }
 
-    @Get("id/{id}")
-    public NumericSequence getById(String id) {
-        return service.getSequence(id);
-    }
-
-    @Get("id/{id}/next")
-    public long next(String id) {
-        return service.increment(id);
-    }
-
-    @Get("name/{namespace}/{name}")
-    public NumericSequence byName(String namespace, String name) {
-        return service.getSequence(namespace, name);
-    }
-
-    @Get("name/{namespace}/{name}/next")
-    public long next(String namespace, String name) {
-        return service.increment(namespace, name);
-    }
-
     @Get
     public List<NumericSequence> list(@QueryParam("namespace") String namespace) {
         if (namespace == null || namespace.isEmpty()) {
@@ -53,5 +34,33 @@ public class SequenceController {
         }
     }
 
+    @Get("{id}")
+    public NumericSequence getById(UUID id) {
+        return service.getSequence(id.toString());
+    }
 
+    @Get("{id}/next")
+    public long nextById(UUID id) {
+        return service.increment(id.toString());
+    }
+
+    @Get("{namespace}/{name}")
+    public NumericSequence getByName(String namespace, String name) {
+        return service.getSequence(namespace, name);
+    }
+
+    @Get("{namespace}/{name}/next")
+    public long nextByName(String namespace, String name) {
+        return service.increment(namespace, name);
+    }
+
+    @Patch("{id}")
+    public NumericSequence reset(UUID id, long start) {
+        return service.resetSequence(id.toString(), start);
+    }
+
+    @Delete
+    public void delete(String id) {
+        service.deleteSequence(id);
+    }
 }

@@ -1,13 +1,13 @@
 package io.sequenceserver.web;
 
 import io.avaje.http.api.*;
+import io.javalin.http.Context;
 import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
 import io.sequenceservice.service.RDBSequenceService;
 
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @Path("sequence")
@@ -35,13 +35,13 @@ public class SequenceController {
     }
 
     @Get("{id}")
-    public NumericSequence getById(UUID id) {
-        return service.getSequence(id.toString());
+    public NumericSequence getById(String id) {
+        return service.getSequence(id);
     }
 
     @Get("{id}/next")
-    public long nextById(UUID id) {
-        return service.increment(id.toString());
+    public long nextById(String id) {
+        return service.increment(id);
     }
 
     @Get("{namespace}/{name}")
@@ -55,13 +55,14 @@ public class SequenceController {
     }
 
     @Patch("{id}")
-    public NumericSequence reset(UUID id, NumericSequenceDefinition reset) {
-        return service.resetSequence(id.toString(), reset.getStart());
-    }
-
-    @Post("{id}")
-    public NumericSequence reset(UUID id) {
-        return service.resetSequence(id.toString());
+    public NumericSequence reset(String id, Context context) {
+        String body = context.body();
+        if (body.isBlank()) {
+            return service.resetSequence(id);
+        } else {
+            NumericSequenceDefinition reset = context.bodyAsClass(NumericSequenceDefinition.class);
+            return service.resetSequence(id, reset.getStart());
+        }
     }
 
     @Delete("{id}")

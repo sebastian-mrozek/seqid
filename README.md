@@ -8,7 +8,7 @@ curl -X POST -d '{"namespace":"test1","name":"order-numbers","start":100000}' ht
 List sequences:
 ```
 curl http://localhost:7000/sequence
-curl http://localhost:7000/sequence/{namespace}
+curl http://localhost:7000/sequence?namespace={namespace}
 ```
 
 Get sequence:
@@ -18,12 +18,12 @@ curl http://localhost:7000/sequence/{id}
 
 Reset sequence to default start:
 ```
-curl -X POST http://localhost:7000/sequence/{id}
+curl -X PATCH http://localhost:7000/sequence/{id}
 ```
 
-Reset sequence to custom start:
+Reset sequence to custom start (10):
 ```
-curl -X PATCH -d '10' http://localhost:7000/sequence/{id}
+curl -X PATCH -d '{"start":10}' http://localhost:7000/sequence/{id}
 ```
 
 Delete sequence:

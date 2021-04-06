@@ -56,14 +56,15 @@ public class SequenceController {
 
     @Patch("{id}")
     public NumericSequence reset(UUID id, NumericSequenceDefinition reset) {
-        if (reset == null) {
-            return service.resetSequence(id.toString());
-        } else {
-            return service.resetSequence(id.toString(), reset.getStart());
-        }
+        return service.resetSequence(id.toString(), reset.getStart());
     }
 
-    @Delete
+    @Post("{id}")
+    public NumericSequence reset(UUID id) {
+        return service.resetSequence(id.toString());
+    }
+
+    @Delete("{id}")
     public void delete(String id) {
         service.deleteSequence(id);
     }

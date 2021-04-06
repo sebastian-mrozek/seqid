@@ -55,8 +55,12 @@ public class SequenceController {
     }
 
     @Patch("{id}")
-    public NumericSequence reset(UUID id, long start) {
-        return service.resetSequence(id.toString(), start);
+    public NumericSequence reset(UUID id, NumericSequenceDefinition reset) {
+        if (reset == null) {
+            return service.resetSequence(id.toString());
+        } else {
+            return service.resetSequence(id.toString(), reset.getStart());
+        }
     }
 
     @Delete

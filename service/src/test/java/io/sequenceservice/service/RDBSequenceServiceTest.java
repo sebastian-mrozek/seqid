@@ -91,6 +91,7 @@ public class RDBSequenceServiceTest {
 
         sequenceService.resetSequence(id, 98765);
         NumericSequence sequence = sequenceService.getSequence(id);
+        assertEquals(98765, sequence.getSequenceDefinition().getStart());
         assertEquals(98765, sequence.getLastValue(), "last value");
         assertEquals(98765, sequenceService.increment(id), "incremented 1st time");
         assertEquals(98766, sequenceService.increment(id), "incremented 2nd time");

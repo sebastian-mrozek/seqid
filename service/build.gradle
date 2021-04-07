@@ -15,7 +15,7 @@ compileJava {
     targetCompatibility = '11'
 }
 
-def v_ebean = '12.6.6'
+def v_ebean = '12.8.1'
 
 dependencies {
 
@@ -35,8 +35,8 @@ dependencies {
     testImplementation "org.assertj:assertj-core:3.19.0"
 
 
-    testRuntime "org.junit.jupiter:junit-jupiter-engine"
-    testRuntime "ch.qos.logback:logback-classic:1.0.13"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testRuntimeOnly "ch.qos.logback:logback-classic:1.0.13"
 
 }
 

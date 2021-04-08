@@ -1,5 +1,4 @@
 import io.sequenceserver.web.Application;
-import kong.unirest.HttpResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +20,7 @@ public class ApplicationTest {
     public void testNext() {
         String id = testClient.createAndAssertSequence("new-sequence-1");
 
-        HttpResponse<String> response = testClient.get(id + "/next");
+        Response<String> response = testClient.get(id + "/next");
         Assertions.assertThat(response.getBody()).isEqualTo("10");
 
         response = testClient.get(id + "/next");

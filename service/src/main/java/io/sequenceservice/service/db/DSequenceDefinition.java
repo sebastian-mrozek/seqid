@@ -16,7 +16,7 @@ public class DSequenceDefinition extends Model {
     UUID id;
 
     @NotNull
-    @Index(columnNames = {"namespace", "name"})
+    @Index(columnNames = {"namespace", "name"}, unique = true)
     @Column(length = 99)
     String namespace;
 

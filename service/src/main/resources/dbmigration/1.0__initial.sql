@@ -4,7 +4,7 @@ create table dsequence_definition (
   namespace                     varchar(99) not null,
   name                          varchar(99) not null,
   start                         bigint not null,
+  constraint uq_dsequence_definition_namespace_name unique (namespace,name),
   constraint pk_dsequence_definition primary key (id)
 );
 
-create index ix_dsequence_definition_namespace_name on dsequence_definition (namespace,name);

@@ -4,6 +4,7 @@ import io.sequenceservice.api.ISequenceService;
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
 import io.sequenceservice.service.db.query.QDSequenceDefinition;
+import io.sequenceservice.service.sequence.SequenceNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -53,19 +54,19 @@ public class RDBSequenceServiceTest {
 
         sequenceService.deleteSequence(sequence.getId());
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SequenceNotFoundException.class, () -> {
             sequenceService.getSequence(sequence.getId());
         });
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SequenceNotFoundException.class, () -> {
             sequenceService.getSequence("ns3", "seq123");
         });
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SequenceNotFoundException.class, () -> {
             sequenceService.increment(sequence.getId());
         });
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SequenceNotFoundException.class, () -> {
             sequenceService.resetSequence(sequence.getId());
         });
     }

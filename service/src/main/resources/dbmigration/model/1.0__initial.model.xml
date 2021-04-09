@@ -6,7 +6,7 @@
             <column name="namespace" type="varchar(99)" notnull="true"/>
             <column name="name" type="varchar(99)" notnull="true"/>
             <column name="start" type="bigint" notnull="true"/>
+            <uniqueConstraint name="uq_dsequence_definition_namespace_name" columnNames="namespace,name" oneToOne="false" nullableColumns=""/>
         </createTable>
-        <createIndex indexName="ix_dsequence_definition_namespace_name" tableName="dsequence_definition" columns="namespace,name"/>
     </changeSet>
 </migration>

@@ -36,4 +36,8 @@ public class TestClient {
         HttpResponse<String> httpResponse = Unirest.delete(apiBaseUrl + path).asString();
         return new Response<>(httpResponse.getStatus(), httpResponse.getBody());
     }
+
+    public Response<String> get() {
+        return get("");
+    }
 }

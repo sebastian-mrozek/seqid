@@ -1,0 +1,18 @@
+[
+  {
+    "sequenceDefinition": {
+      "namespace": "test6",
+      "name": "a",
+      "start": 1
+    },
+    "lastValue": 1
+  },
+  {
+    "sequenceDefinition": {
+      "namespace": "test6",
+      "name": "c",
+      "start": 3
+    },
+    "lastValue": 3
+  }
+]

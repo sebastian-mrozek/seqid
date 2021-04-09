@@ -1,6 +1,8 @@
 package io.sequenceserver.web;
 
+import io.ebean.DuplicateKeyException;
 import io.javalin.Javalin;
+import io.sequenceservice.service.sequence.SequenceNotFoundException;
 
 public class Application {
 
@@ -30,6 +32,7 @@ public class Application {
     }
 
     private void registerExceptionMappers() {
-        server.exception(IllegalArgumentException.class, new ExceptionHandler());
+        server.exception(SequenceNotFoundException.class, ExceptionHandlerFactory.createHandler(SequenceNotFoundException.class, 404));
+        server.exception(DuplicateKeyException.class, ExceptionHandlerFactory.createHandler(DuplicateKeyException.class, 400));
     }
 }

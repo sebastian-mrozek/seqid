@@ -10,6 +10,7 @@ import io.sequenceservice.service.db.DSequenceDefinition;
 import io.sequenceservice.service.db.SequenceMapper;
 import io.sequenceservice.service.db.query.QDSequenceDefinition;
 import io.sequenceservice.service.sequence.ISequencer;
+import io.sequenceservice.service.sequence.SequenceNotFoundException;
 import io.sequenceservice.service.sequence.SequencerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,7 +158,7 @@ public class RDBSequenceService implements ISequenceService {
                 .id.eq(sequenceId)
                 .findOneOrEmpty();
         if (dbSequenceResult.isEmpty()) {
-            throw new IllegalArgumentException("Sequence of id " + id + " does not exist");
+            throw new SequenceNotFoundException(id);
         }
         return dbSequenceResult.get();
     }
@@ -169,7 +170,7 @@ public class RDBSequenceService implements ISequenceService {
                 .findOneOrEmpty();
 
         if (dbSequenceResult.isEmpty()) {
-            throw new IllegalArgumentException("Sequence " + name + " in namespace " + namespace + " does not exist");
+            throw new SequenceNotFoundException(namespace, name);
         }
 
         return dbSequenceResult.get();

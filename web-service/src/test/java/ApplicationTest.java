@@ -1,4 +1,3 @@
-import io.ebean.test.Json;
 import io.javalin.plugin.json.JavalinJson;
 import io.sequenceserver.web.Application;
 import io.sequenceservice.api.NumericSequence;
@@ -6,6 +5,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 public class ApplicationTest {
 
@@ -56,11 +57,11 @@ public class ApplicationTest {
         testClient.get(id + "/next");
 
         response = testClient.patch(id);
-        TestUtil.assertResponse(response, 200,"new-sequence-3.json");
+        TestUtil.assertResponse(response, 200, "new-sequence-3.json");
         Assertions.assertThat(response.code).isEqualTo(200);
 
         response = testClient.patchResource(id, "new-sequence-3-custom-def.json");
-        TestUtil.assertResponse(response, 200,"new-sequence-3-custom.json");
+        TestUtil.assertResponse(response, 200, "new-sequence-3-custom.json");
         Assertions.assertThat(response.code).isEqualTo(200);
     }
 
@@ -78,12 +79,35 @@ public class ApplicationTest {
 
     @Test
     public void testCreateDuplicate() {
-
+        testClient.postResource("new-sequence-5-def.json");
+        Response<String> response = testClient.postResource("new-sequence-5-def.json");
+        Assertions.assertThat(response.code).isEqualTo(400);
     }
 
     @Test
     public void testNotFound() {
+        Response<String> response = testClient.get(UUID.randomUUID().toString());
+        Assertions.assertThat(response.code).isEqualTo(404);
+    }
 
+    @Test
+    public void testList() {
+        testClient.postResource("new-sequence-6a-def.json");
+        testClient.postResource("new-sequence-6b-def.json");
+        testClient.postResource("new-sequence-6c-def.json");
+
+        Response<String> response = testClient.get();
+        Assertions.assertThat(response.code).isEqualTo(200);
+
+        response = testClient.get("?namespace=test6");
+        TestUtil.assertResponse(response, 200, "new-sequence-6-list-test6.json");
+
+        response = testClient.get("?namespace=other6");
+        TestUtil.assertResponse(response, 200, "new-sequence-6-list-other6.json");
+
+        response = testClient.get("?namespace=no-such-namespace");
+        Assertions.assertThat(response.code).isEqualTo(200);
+        Assertions.assertThat(response.body).isEqualTo("[]");
     }
 
     @AfterAll

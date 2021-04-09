@@ -27,7 +27,7 @@ abstract class Sequencer implements ISequencer {
             SqlQuery.TypeQuery<Long> nextValueQuery = DB.sqlQuery(nextValueSql).mapToScalar(Long.class);
             return nextValueQuery.findOne();
         } catch (PersistenceException e) {
-            throw new IllegalArgumentException("Sequence with ID: " + id + " does not exist");
+            throw new SequenceNotFoundException(id.toString());
         }
     }
 
@@ -43,7 +43,7 @@ abstract class Sequencer implements ISequencer {
             String dropSql = queryProvider.getDropQuery(id);
             DB.sqlUpdate(dropSql).execute();
         } catch (PersistenceException e) {
-            throw new IllegalArgumentException("Sequence with ID: " + id + " does not exist");
+            throw new SequenceNotFoundException(id.toString());
         }
     }
 

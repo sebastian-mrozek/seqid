@@ -30,6 +30,6 @@ public class Application {
     }
 
     private void registerExceptionMappers() {
-//        server.exception(
+        server.exception(IllegalArgumentException.class, new ExceptionHandler());
     }
 }

@@ -20,9 +20,16 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreateAndGet() {
         Response<String> response = testClient.postResource("new-sequence-1-def.json");
         TestUtil.assertResponse(response, 201, "new-sequence-1.json");
+        String id = JavalinJson.fromJson(response.body, NumericSequence.class).getId();
+
+        response = testClient.get(id);
+        TestUtil.assertResponse(response, 200, "new-sequence-1.json");
+
+        response = testClient.get("test1/my-sequence");
+        TestUtil.assertResponse(response, 200, "new-sequence-1.json");
     }
 
     @Test
@@ -34,7 +41,7 @@ public class ApplicationTest {
         Assertions.assertThat(response.code).isEqualTo(200);
         Assertions.assertThat(response.body).isEqualTo("2");
 
-        response = testClient.get(id + "/next");
+        response = testClient.get("test2/your-sequence/next");
         Assertions.assertThat(response.code).isEqualTo(200);
         Assertions.assertThat(response.body).isEqualTo("3");
     }
@@ -59,7 +66,14 @@ public class ApplicationTest {
 
     @Test
     public void testDelete() {
+        Response<String> response = testClient.postResource("new-sequence-4-def.json");
+        String id = JavalinJson.fromJson(response.body, NumericSequence.class).getId();
 
+        response = testClient.delete(id);
+        Assertions.assertThat(response.code).isEqualTo(204);
+
+        response = testClient.get(id);
+        Assertions.assertThat(response.code).isEqualTo(404);
     }
 
     @Test

@@ -1,5 +1,8 @@
 package io.sequenceservice.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class NumericSequence {
@@ -8,7 +11,8 @@ public class NumericSequence {
     private final NumericSequenceDefinition sequenceDefinition;
     private final long lastValue;
 
-    public NumericSequence(String id, NumericSequenceDefinition sequenceDefinition, long lastValue) {
+    @JsonCreator
+    public NumericSequence(@JsonProperty("id") String id, @JsonProperty("sequenceDefinition") NumericSequenceDefinition sequenceDefinition, @JsonProperty("lastValue") long lastValue) {
         this.id = id;
         this.sequenceDefinition = sequenceDefinition;
         this.lastValue = lastValue;

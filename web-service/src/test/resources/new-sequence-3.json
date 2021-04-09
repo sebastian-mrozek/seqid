@@ -1,0 +1,8 @@
+{
+  "sequenceDefinition": {
+    "namespace": "test3",
+    "name": "orders",
+    "start": 800000
+  },
+  "lastValue": 800000
+}

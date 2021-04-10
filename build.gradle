@@ -5,5 +5,3 @@ plugins {
 
 group 'io.sequenceservice'
 version '1.0-SNAPSHOT'
-
-idea.module.inheritOutputDirs = true

@@ -31,6 +31,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:$v_slf4j"
     implementation "ch.qos.logback:logback-classic:$v_logback"
     implementation "io.ebean:ebean:$v_ebean"
+    implementation "io.ebean:ebean-migration:$v_ebean_migration"
     implementation "com.h2database:h2:1.4.200"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$v_junit"

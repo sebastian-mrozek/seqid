@@ -17,6 +17,7 @@ public class Application {
         this.server = Javalin.create();
         WebRoutesRegistration.init(server);
         registerExceptionMappers();
+        registerStaticContent();
     }
 
     public void start() {
@@ -34,5 +35,9 @@ public class Application {
     private void registerExceptionMappers() {
         server.exception(SequenceNotFoundException.class, ExceptionHandlerFactory.createHandler(SequenceNotFoundException.class, 404));
         server.exception(DuplicateKeyException.class, ExceptionHandlerFactory.createHandler(DuplicateKeyException.class, 400));
+    }
+
+    private void registerStaticContent() {
+        server.config.addStaticFiles("/static");
     }
 }

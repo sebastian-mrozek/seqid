@@ -5,3 +5,4 @@ build/
 out/
 sequencedb.*.db
 */src/main/generated/*
+frontend/public

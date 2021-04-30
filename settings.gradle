@@ -2,5 +2,6 @@ rootProject.name = 'sequence-server'
 
 include 'service'
 include 'api'
+include 'frontend'
 include 'web-service'
 

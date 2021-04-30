@@ -5,3 +5,15 @@ plugins {
 
 group 'io.sequenceservice'
 version '1.0-SNAPSHOT'
+
+task copyFrontEndToBackend(type: Copy) {
+    doFirst {
+        delete fileTree('web-service/src/main/resources/static')
+    }
+    dependsOn ':frontend:packageRunBuild'
+    from 'frontend/public'
+    into 'web-service/src/main/resources/static'
+    outputs.upToDateWhen { false }
+}
+
+task buildBackend(dependsOn: copyFrontEndToBackend)

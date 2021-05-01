@@ -1,6 +1,7 @@
 <script lang="ts">
   import SequenceListView from "./components/SequenceListView.svelte";
-  import type { NumericSequence } from "./model";
+  import NewSequenceEditor from "./components/NewSequenceEditor.svelte";
+  import type { NumericSequence, NumericSequenceDefinition } from "./model";
   import { sequenceService } from "./service";
 
   let sequences: NumericSequence[] = [];
@@ -10,32 +11,17 @@
     console.log("request issued");
   }
 
-  fetchSequences();
+  function createNew(event) {
+    sequenceService.create(event.detail, (newSequence) => (sequences = [...sequences, newSequence]));
+  }
 
-  // let sequences: NumericSequence[] = [
-  //   {
-  //     id: "aa",
-  //     sequenceDefinition: {
-  //       name: "some sequence",
-  //       namespace: "ns1",
-  //       start: 1,
-  //     },
-  //     lastValue: 5,
-  //   },
-  //   {
-  //     id: "ab",
-  //     sequenceDefinition: {
-  //       name: "another sequence",
-  //       namespace: "ns2",
-  //       start: 2,
-  //     },
-  //     lastValue: 5115,
-  //   },
-  // ];
+  fetchSequences();
 </script>
 
 <main class="main">
-  Sequences <button on:click={fetchSequences}>Refresh</button>
+  Sequences
+  <button on:click={fetchSequences}>Refresh</button>
+  <NewSequenceEditor on:create={createNew} />
   <SequenceListView {sequences} />
 </main>
 

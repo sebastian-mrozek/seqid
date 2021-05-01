@@ -14,10 +14,16 @@ public class Application {
     }
 
     public Application() {
-        this.server = Javalin.create();
+        this.server = Javalin.create(cfg -> {
+            cfg.enableCorsForAllOrigins();
+
+            // TODO: make it configurable on app startup, only allow in dev mode
+            cfg.enableDevLogging();
+
+            cfg.addStaticFiles("/static");
+        });
         WebRoutesRegistration.init(server);
         registerExceptionMappers();
-        registerStaticContent();
     }
 
     public void start() {
@@ -35,9 +41,5 @@ public class Application {
     private void registerExceptionMappers() {
         server.exception(SequenceNotFoundException.class, ExceptionHandlerFactory.createHandler(SequenceNotFoundException.class, 404));
         server.exception(DuplicateKeyException.class, ExceptionHandlerFactory.createHandler(DuplicateKeyException.class, 400));
-    }
-
-    private void registerStaticContent() {
-        server.config.addStaticFiles("/static");
     }
 }

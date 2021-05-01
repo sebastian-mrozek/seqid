@@ -1,4 +1,3 @@
 TODO:
-- add 'find' queries:
--- find all
--- by namespace
+- add prefix and suffix (optional)
+  

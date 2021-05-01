@@ -13,7 +13,7 @@
 
 <style>
   .seq-list {
-    margin: 2em;
+    margin: 1em;
     border: 1px solid gray;
     border-radius: 3px;
   }

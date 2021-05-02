@@ -16,24 +16,43 @@
 </script>
 
 <div class="wrapper">
-  <span>
-    <label for="name">Name:</label>
+  <div class="labeled-edit">
+    <label for="name">Name</label>
     <input id="name" type="text" bind:value={name} />
-  </span>
-  <span>
-    <label for="namespace">Namespace:</label>
+  </div>
+  <div class="labeled-edit">
+    <label for="namespace">Namespace</label>
     <input id="namespace" type="text" bind:value={namespace} />
-  </span>
-  <span>
-    <label for="start">Start:</label>
+  </div>
+  <div class="labeled-edit">
+    <label for="start">Start</label>
     <input id="start" type="number" bind:value={start} />
-  </span>
-  <button on:click={onClick} disabled={!valid}>Add</button>
+  </div>
+  <button class="add" on:click={onClick} disabled={!valid}>Add</button>
 </div>
 
 <style>
-  .wrapper {
+  .add {
+    align-self: center;
     padding: 1em;
+  }
+  .labeled-edit {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+  }
+  label {
+    font-variant: small-caps;
+    color: #555;
+  }
+  input {
+    border-radius: 3px;
+    border: none;
+    padding: 0.5em;
+    font-size: 1.2em;
+  }
+  .wrapper {
+    display: flex;
     margin-top: 1em;
     background-color: #eee;
     border-radius: 3px;

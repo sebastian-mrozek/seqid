@@ -34,14 +34,20 @@
 </script>
 
 <main class="main">
-  Sequences
-  <button on:click={fetchSequences}>Refresh</button>
+  <div class="title">
+    Sequences
+    <button class="refresh" on:click={fetchSequences}>Refresh</button>
+  </div>
   <NewSequenceEditor on:create={createNew} />
   <SequenceListView {sequences} on:increment={increment} />
 </main>
 
 <style>
-  .main {
+  .refresh {
+    margin-left: auto;
+  }
+  .title {
+    display: flex;
     margin: 1em;
   }
 </style>

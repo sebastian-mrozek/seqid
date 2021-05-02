@@ -17,7 +17,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
     console.log(response);
   }
 
-  function getAll(onSuccess: (data: NumericSequence[]) => void): void {
+  async function getAll(onSuccess: (data: NumericSequence[]) => void): void {
     restApiClient
       .get<NumericSequence[]>("")
       .then((response) => {
@@ -27,7 +27,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
       .catch(handleError);
   }
 
-  function create(newSequenceDefinition: NumericSequenceDefinition, onSuccess: (newSequence: NumericSequence) => void): void {
+  async function create(newSequenceDefinition: NumericSequenceDefinition, onSuccess: (newSequence: NumericSequence) => void): void {
     restApiClient
       .post<NumericSequence>("", newSequenceDefinition)
       .then((response) => {
@@ -36,7 +36,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
       })
       .catch(handleError);
   }
-  function increment(id: string, onSuccess: (nextValue: number) => void): void {
+  async function increment(id: string, onSuccess: (nextValue: number) => void): void {
     restApiClient
       .get<number>(id + "/next")
       .then((response) => {

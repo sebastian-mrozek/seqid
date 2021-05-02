@@ -11,8 +11,8 @@
 </script>
 
 <div>
-  <span>{sequence.sequenceDefinition.name}@{sequence.sequenceDefinition.namespace}</span>
-  =
+  <span>{sequence.sequenceDefinition.name}</span>
+  <span class="namespace">{sequence.sequenceDefinition.namespace}</span>
   <span class="seq-value">{sequence.lastValue}</span>
   <button class="increment" on:click={onClick}>+</button>
 </div>
@@ -22,6 +22,13 @@
     color: #333;
     padding: 0.2em;
     font-size: 0.8em;
+  }
+  .namespace {
+    font-size: 0.7em;
+    border-radius: 3px;
+    padding: 0.4em;
+    background-color: #ddd;
+    color: #555;
   }
   .increment {
     border-radius: 5px;

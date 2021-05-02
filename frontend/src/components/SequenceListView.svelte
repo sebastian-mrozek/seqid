@@ -19,12 +19,10 @@
   }
   .seq-item {
     margin: 0;
-    padding: 0.2em;
+    padding: 0.5em;
     border-bottom: 1px solid gray;
   }
   .seq-item:last-child {
-    margin: 0;
-    padding: 0.2em;
     border-bottom: 0px;
   }
 </style>

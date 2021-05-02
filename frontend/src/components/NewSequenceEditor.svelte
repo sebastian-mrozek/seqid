@@ -16,12 +16,19 @@
 </script>
 
 <div class="wrapper">
-  <input type="text" bind:value={name} />
-  @
-  <input type="text" bind:value={namespace} />
-  =
-  <input type="number" bind:value={start} />
-  <button on:click={onClick} disabled={!valid}>Create</button>
+  <span>
+    <label for="name">Name:</label>
+    <input id="name" type="text" bind:value={name} />
+  </span>
+  <span>
+    <label for="namespace">Namespace:</label>
+    <input id="namespace" type="text" bind:value={namespace} />
+  </span>
+  <span>
+    <label for="start">Start:</label>
+    <input id="start" type="number" bind:value={start} />
+  </span>
+  <button on:click={onClick} disabled={!valid}>Add</button>
 </div>
 
 <style>

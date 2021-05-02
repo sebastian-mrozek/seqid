@@ -8,7 +8,6 @@
 
   function fetchSequences() {
     sequenceService.getAll((data) => (sequences = data));
-    console.log("request issued");
   }
 
   function createNew(event: CustomEvent<NumericSequenceDefinition>) {

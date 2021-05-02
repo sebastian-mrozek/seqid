@@ -8,7 +8,7 @@ interface SequenceService {
 }
 
 export const sequenceService: SequenceService = ((): SequenceService => {
-  const restApi = axios.create({ baseURL: "http://localhost:7000/sequence" });
+  const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
 
   function handleError(error) {
     console.log(error);
@@ -17,18 +17,18 @@ export const sequenceService: SequenceService = ((): SequenceService => {
     console.log(response);
   }
 
-  function getAll(onResolve: (data: NumericSequence[]) => void): void {
-    restApi
+  function getAll(onSuccess: (data: NumericSequence[]) => void): void {
+    restApiClient
       .get<NumericSequence[]>("")
       .then((response) => {
         log(response);
-        onResolve(response.data);
+        onSuccess(response.data);
       })
       .catch(handleError);
   }
 
   function create(newSequenceDefinition: NumericSequenceDefinition, onSuccess: (newSequence: NumericSequence) => void): void {
-    restApi
+    restApiClient
       .post<NumericSequence>("", newSequenceDefinition)
       .then((response) => {
         log(response);
@@ -37,7 +37,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
       .catch(handleError);
   }
   function increment(id: string, onSuccess: (nextValue: number) => void): void {
-    restApi
+    restApiClient
       .get<number>(id + "/next")
       .then((response) => {
         log(response);

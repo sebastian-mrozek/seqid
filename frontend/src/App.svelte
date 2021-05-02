@@ -30,6 +30,22 @@
     return index;
   }
 
+  function reset(event: CustomEvent<string>) {
+    const id = event.detail;
+    sequenceService.reset(id, (updatedSequence) => {
+      const index = findIndex(sequences, id);
+      sequences[index] = updatedSequence;
+    });
+  }
+
+  function remove(event: CustomEvent<string>) {
+    const id = event.detail;
+    sequenceService.remove(id, () => {
+      const index = findIndex(sequences, id);
+      sequences = sequences.filter((e, i) => i !== index);
+    });
+  }
+
   fetchSequences();
 </script>
 
@@ -39,7 +55,7 @@
     <button class="refresh" on:click={fetchSequences}>Refresh</button>
   </div>
   <NewSequenceEditor on:create={createNew} />
-  <SequenceListView {sequences} on:increment={increment} />
+  <SequenceListView {sequences} on:increment={increment} on:reset={reset} on:remove={remove} />
 </main>
 
 <style>

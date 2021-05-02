@@ -4,10 +4,6 @@
   const dispatch = createEventDispatcher();
 
   export let sequence: NumericSequence;
-
-  function onClick(event) {
-    dispatch("increment", sequence.id);
-  }
 </script>
 
 <div class="container">
@@ -17,7 +13,9 @@
   </div>
   <div class="seq-value">{sequence.lastValue}</div>
   <div class="seq-actions">
-    <button class="increment" on:click={onClick}>+</button>
+    <button class="increment" on:click={(e) => dispatch("increment", sequence.id)}>increment</button>
+    <button class="reset" on:click={(e) => dispatch("reset", sequence.id)}>reset</button>
+    <button class="delete" on:click={(e) => dispatch("remove", sequence.id)}>delete</button>
   </div>
 </div>
 

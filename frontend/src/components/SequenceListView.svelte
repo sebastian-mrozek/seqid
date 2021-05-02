@@ -7,7 +7,7 @@
 
 <div class="seq-list">
   {#each sequences as sequence}
-    <div class="seq-item"><SequenceView {sequence} /></div>
+    <div class="seq-item"><SequenceView {sequence} on:increment /></div>
   {/each}
 </div>
 

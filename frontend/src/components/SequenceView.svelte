@@ -1,20 +1,29 @@
 <script lang="ts">
   import type { NumericSequence } from "../model";
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   export let sequence: NumericSequence;
+
+  function onClick(event) {
+    dispatch("increment", sequence.id);
+  }
 </script>
 
 <div>
   <span>{sequence.sequenceDefinition.name}@{sequence.sequenceDefinition.namespace}</span>
   =
   <span class="seq-value">{sequence.lastValue}</span>
+  <button class="increment" on:click={onClick}>+</button>
 </div>
 
 <style>
   .seq-value {
-    background-color: #ddd;
     color: #333;
-    border-radius: 3px;
     padding: 0.2em;
     font-size: 0.8em;
+  }
+  .increment {
+    border-radius: 5px;
   }
 </style>

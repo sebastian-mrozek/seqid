@@ -50,11 +50,11 @@
 </script>
 
 <main class="main">
-  <div class="title">
-    Sequences
+  <div class="header">
+    <h2 class="title">Seqid</h2>
+    <NewSequenceEditor on:create={createNew} />
     <button class="refresh" on:click={fetchSequences}>Refresh</button>
   </div>
-  <NewSequenceEditor on:create={createNew} />
   <SequenceListView {sequences} on:increment={increment} on:reset={reset} on:remove={remove} />
 </main>
 
@@ -62,8 +62,12 @@
   .refresh {
     margin-left: auto;
   }
-  .title {
+  .header {
     display: flex;
     margin: 1em;
+    flex-wrap: wrap;
+  }
+  .title {
+    margin-right: 2em;
   }
 </style>

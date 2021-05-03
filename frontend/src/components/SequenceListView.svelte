@@ -6,23 +6,21 @@
 </script>
 
 <div class="seq-list">
-  {#each sequences as sequence}
-    <div class="seq-item"><SequenceView {sequence} on:increment on:reset on:remove /></div>
-  {/each}
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Name @ Namespace</th>
+        <th>Last Value</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each sequences as sequence}
+        <SequenceView {sequence} on:increment on:reset on:remove />
+      {/each}
+    </tbody>
+  </table>
 </div>
 
 <style>
-  .seq-list {
-    margin: 1em;
-    border: 1px solid gray;
-    border-radius: 3px;
-  }
-  .seq-item {
-    margin: 0;
-    padding: 0.5em;
-    border-bottom: 1px solid gray;
-  }
-  .seq-item:last-child {
-    border-bottom: 0px;
-  }
 </style>

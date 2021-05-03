@@ -6,7 +6,7 @@
 </script>
 
 <div class="seq-list">
-  <table class="striped">
+  <table class="striped no-max">
     <thead>
       <tr>
         <th>Name @ Namespace</th>
@@ -23,4 +23,7 @@
 </div>
 
 <style>
+  .no-max {
+    max-height: none;
+  }
 </style>

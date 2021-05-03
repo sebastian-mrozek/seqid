@@ -53,7 +53,7 @@
   <div class="header">
     <h2 class="title">Seqid</h2>
     <NewSequenceEditor on:create={createNew} />
-    <button class="refresh" on:click={fetchSequences}>Refresh</button>
+    <button class="refresh rounded" on:click={fetchSequences}>Refresh</button>
   </div>
   <SequenceListView {sequences} on:increment={increment} on:reset={reset} on:remove={remove} />
 </main>

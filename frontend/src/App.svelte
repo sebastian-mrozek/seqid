@@ -49,17 +49,17 @@
   fetchSequences();
 </script>
 
+<div class="header">
+  <div class="title">seqid</div>
+  <NewSequenceEditor on:create={createNew} />
+  <button class="float-right rounded" on:click={fetchSequences}>Refresh</button>
+</div>
 <main class="main">
-  <div class="header">
-    <h2 class="title">Seqid</h2>
-    <NewSequenceEditor on:create={createNew} />
-    <button class="refresh rounded" on:click={fetchSequences}>Refresh</button>
-  </div>
   <SequenceListView {sequences} on:increment={increment} on:reset={reset} on:remove={remove} />
 </main>
 
 <style>
-  .refresh {
+  .float-right {
     margin-left: auto;
   }
   .header {
@@ -68,6 +68,15 @@
     flex-wrap: wrap;
   }
   .title {
+    font-family: monospace;
     margin-right: 2em;
+    padding: 1em;
+    font-size: 1.5em;
+    background-color: black;
+    color: white;
+    border-radius: 2.2em;
+    border: 1px solid black;
+    width: 2.2em;
+    height: 2.2em;
   }
 </style>

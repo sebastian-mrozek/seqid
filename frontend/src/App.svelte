@@ -51,15 +51,20 @@
 
 <div class="header">
   <div class="title">seqid</div>
-  <NewSequenceEditor on:create={createNew} />
-  <button class="float-right rounded" on:click={fetchSequences}>Refresh</button>
+  <div>
+    <NewSequenceEditor on:create={createNew} />
+  </div>
+  <div class="refresh">
+    <button on:click={fetchSequences}>Refresh</button>
+  </div>
 </div>
 <main class="main">
   <SequenceListView {sequences} on:increment={increment} on:reset={reset} on:remove={remove} />
 </main>
 
 <style>
-  .float-right {
+  .refresh {
+    align-self: center;
     margin-left: auto;
   }
   .header {

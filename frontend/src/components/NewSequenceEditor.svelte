@@ -38,7 +38,7 @@
     <input id="prefix" type="text" bind:value={definition.prefix} size="5" />
     <label for="suffix">Suffix</label>
     <input id="suffix" type="text" bind:value={definition.suffix} size="5" />
-    <button class="add" on:click={onClick} disabled={!valid}>Add</button>
+    <button class="add" on:click={onClick} disabled={!valid}>Create</button>
   </div>
 </form>
 

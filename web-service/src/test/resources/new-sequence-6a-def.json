@@ -1,5 +1,6 @@
 {
   "namespace": "test6",
   "name": "a",
-  "start": 1
+  "start": 1,
+  "prefix": "ABC-"
 }

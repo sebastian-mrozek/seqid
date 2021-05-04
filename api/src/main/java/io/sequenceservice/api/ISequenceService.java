@@ -16,9 +16,9 @@ public interface ISequenceService {
 
     NumericSequence getSequence(String id);
 
-    long increment(String namespace, String name);
+    String increment(String namespace, String name);
 
-    long increment(String id);
+    String increment(String id);
 
     List<NumericSequenceDefinition> listAllDefinitions();
 

@@ -2,7 +2,6 @@ package io.sequenceservice.service.db;
 
 import io.sequenceservice.api.NumericSequence;
 import io.sequenceservice.api.NumericSequenceDefinition;
-import io.sequenceservice.service.db.DSequenceDefinition;
 
 public class SequenceMapper {
     public DSequenceDefinition toDb(NumericSequenceDefinition definition) {
@@ -13,7 +12,11 @@ public class SequenceMapper {
         return new DSequenceDefinition(
                 definition.getNamespace(),
                 definition.getName(),
-                definition.getStart());
+                definition.getStart(),
+                definition.getLength(),
+                definition.getMax(),
+                definition.getPrefix(),
+                definition.getSuffix());
     }
 
     public NumericSequenceDefinition toApi(DSequenceDefinition dbSequence) {
@@ -24,10 +27,14 @@ public class SequenceMapper {
         return new NumericSequenceDefinition(
                 dbSequence.getNamespace(),
                 dbSequence.getName(),
-                dbSequence.getStart());
+                dbSequence.getStart(),
+                dbSequence.getLength(),
+                dbSequence.getMax(),
+                dbSequence.getPrefix(),
+                dbSequence.getSuffix());
     }
 
-    public NumericSequence toApi(DSequenceDefinition dbSequence, long lastValue) {
+    public NumericSequence toApi(DSequenceDefinition dbSequence, String lastValue) {
         NumericSequenceDefinition sequenceDefinition = toApi(dbSequence);
         return new NumericSequence(
                 dbSequence.getId().toString(),

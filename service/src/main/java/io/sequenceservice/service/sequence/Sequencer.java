@@ -2,6 +2,7 @@ package io.sequenceservice.service.sequence;
 
 import io.ebean.DB;
 import io.ebean.SqlQuery;
+import io.sequenceservice.api.NumericSequenceDefinition;
 
 import javax.persistence.PersistenceException;
 import java.util.UUID;
@@ -46,5 +47,4 @@ abstract class Sequencer implements ISequencer {
             throw new SequenceNotFoundException(id.toString());
         }
     }
-
 }

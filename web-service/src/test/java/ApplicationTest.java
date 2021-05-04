@@ -40,11 +40,11 @@ public class ApplicationTest {
 
         response = testClient.get(id + "/next");
         Assertions.assertThat(response.code).isEqualTo(200);
-        Assertions.assertThat(response.body).isEqualTo("2");
+        Assertions.assertThat(response.body).isEqualTo("ON00001234-A");
 
         response = testClient.get("test2/your-sequence/next");
         Assertions.assertThat(response.code).isEqualTo(200);
-        Assertions.assertThat(response.body).isEqualTo("3");
+        Assertions.assertThat(response.body).isEqualTo("ON00001235-A");
     }
 
     @Test

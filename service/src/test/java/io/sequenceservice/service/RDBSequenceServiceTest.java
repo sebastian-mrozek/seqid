@@ -10,8 +10,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.LongStream;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,22 +26,22 @@ public class RDBSequenceServiceTest {
 
     @Test
     public void testCreateAndGet() {
-        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns", "seq1", 5));
-        assertSequence(sequence, "ns", "seq1", 5, 5);
+        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK"));
+        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", "INV-005-OK");
 
         sequence = sequenceService.getSequence("ns", "seq1");
-        assertSequence(sequence, "ns", "seq1", 5, 5);
+        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", "INV-005-OK");
     }
 
     @Test
     public void testNext() {
-        String id = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11)).getId();
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11, (short) 3, 98989898989L, null, null)).getId();
 
-        AtomicLong lastValue = new AtomicLong(11);
-        LongStream.of(11, 12, 13, 14).forEach(expectedNext -> {
+        AtomicReference<String> lastValue = new AtomicReference<>("011");
+        Stream.of("011", "012", "013", "014").forEach(expectedNext -> {
             NumericSequence sequence = sequenceService.getSequence(id);
-            assertSequence(sequence, "ns2", "seq5", 11, lastValue.get());
-            long nextValue = sequenceService.increment(sequence.getId());
+            assertSequence(sequence, "ns2", "seq5", 11, (short) 3, 98989898989L, null, null, lastValue.get());
+            String nextValue = sequenceService.increment(sequence.getId());
             assertEquals(expectedNext, nextValue, "Incremented value");
             lastValue.set(nextValue);
         });
@@ -49,63 +49,55 @@ public class RDBSequenceServiceTest {
 
     @Test
     public void testDelete() {
-        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq123", 999));
-        assertSequence(sequence, "ns3", "seq123", 999, 999);
+        NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq123", 999, (short) 5, Long.MAX_VALUE, "O", "X"));
+        assertSequence(sequence, "ns3", "seq123", 999, (short) 5, Long.MAX_VALUE, "O", "X", "O00999X");
 
         sequenceService.deleteSequence(sequence.getId());
 
-        assertThrows(SequenceNotFoundException.class, () -> {
-            sequenceService.getSequence(sequence.getId());
-        });
+        assertThrows(SequenceNotFoundException.class, () -> sequenceService.getSequence(sequence.getId()));
 
-        assertThrows(SequenceNotFoundException.class, () -> {
-            sequenceService.getSequence("ns3", "seq123");
-        });
+        assertThrows(SequenceNotFoundException.class, () -> sequenceService.getSequence("ns3", "seq123"));
 
-        assertThrows(SequenceNotFoundException.class, () -> {
-            sequenceService.increment(sequence.getId());
-        });
+        assertThrows(SequenceNotFoundException.class, () -> sequenceService.increment(sequence.getId()));
 
-        assertThrows(SequenceNotFoundException.class, () -> {
-            sequenceService.resetSequence(sequence.getId());
-        });
+        assertThrows(SequenceNotFoundException.class, () -> sequenceService.resetSequence(sequence.getId()));
     }
 
     @Test
     public void testReset() {
-        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345, (short) 3, Long.MAX_VALUE, "A", "Z")).getId();
         sequenceService.increment(id);
         sequenceService.increment(id);
         sequenceService.increment(id);
-        long currentValue = sequenceService.increment(id);
-        assertEquals(12348, currentValue, "after 3 increments");
+        String currentValue = sequenceService.increment(id);
+        assertEquals("A12348Z", currentValue, "after 3 increments");
 
         sequenceService.resetSequence(id);
         NumericSequence sequence = sequenceService.getSequence(id);
-        assertEquals(12345, sequence.getLastValue(), "last value");
-        assertEquals(12345, sequenceService.increment(id), "incremented 1st time after reset");
+        assertEquals("A12345Z", sequence.getLastValue(), "last value");
+        assertEquals("A12345Z", sequenceService.increment(id), "incremented 1st time after reset");
     }
 
     @Test
     public void testResetWithValue() {
-        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345)).getId();
+        String id = sequenceService.createSequence(new NumericSequenceDefinition("namespaceReset", "seq999", 12345, (short) 5, Long.MAX_VALUE, "A", "Z")).getId();
 
         sequenceService.resetSequence(id, 98765);
         NumericSequence sequence = sequenceService.getSequence(id);
         assertEquals(98765, sequence.getSequenceDefinition().getStart());
-        assertEquals(98765, sequence.getLastValue(), "last value");
-        assertEquals(98765, sequenceService.increment(id), "incremented 1st time");
-        assertEquals(98766, sequenceService.increment(id), "incremented 2nd time");
-        assertEquals(98767, sequenceService.increment(id), "incremented 3rd time");
+        assertEquals("A98765Z", sequence.getLastValue(), "last value");
+        assertEquals("A98765Z", sequenceService.increment(id), "incremented 1st time");
+        assertEquals("A98766Z", sequenceService.increment(id), "incremented 2nd time");
+        assertEquals("A98767Z", sequenceService.increment(id), "incremented 3rd time");
     }
 
     @Test
     public void testListDefinitions() {
-        NumericSequenceDefinition d1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1)).getSequenceDefinition();
-        NumericSequenceDefinition d2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2)).getSequenceDefinition();
-        NumericSequenceDefinition d3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3)).getSequenceDefinition();
-        NumericSequenceDefinition d4 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq1", 4)).getSequenceDefinition();
-        NumericSequenceDefinition d5 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq2", 5)).getSequenceDefinition();
+        NumericSequenceDefinition d1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1, (short) 3, Long.MAX_VALUE, "A", "Z")).getSequenceDefinition();
+        NumericSequenceDefinition d2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2, (short) 3, Long.MAX_VALUE, "A", "Z")).getSequenceDefinition();
+        NumericSequenceDefinition d3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3, (short) 3, Long.MAX_VALUE, "A", "Z")).getSequenceDefinition();
+        NumericSequenceDefinition d4 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq1", 4, (short) 3, Long.MAX_VALUE, "A", "Z")).getSequenceDefinition();
+        NumericSequenceDefinition d5 = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq2", 5, (short) 3, Long.MAX_VALUE, "A", "Z")).getSequenceDefinition();
 
         List<NumericSequenceDefinition> allDefinitions = sequenceService.listAllDefinitions();
         Assertions.assertThat(allDefinitions).containsExactlyInAnyOrder(d1, d2, d3, d4, d5);
@@ -122,9 +114,9 @@ public class RDBSequenceServiceTest {
 
     @Test
     public void testListSequences() {
-        NumericSequence s1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1));
-        NumericSequence s2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2));
-        NumericSequence s3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3));
+        NumericSequence s1 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq1", 1, (short) 3, Long.MAX_VALUE, "A", "Z"));
+        NumericSequence s2 = sequenceService.createSequence(new NumericSequenceDefinition("ns1", "seq2", 2, (short) 3, Long.MAX_VALUE, "A", "Z"));
+        NumericSequence s3 = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq1", 3, (short) 3, Long.MAX_VALUE, "A", "Z"));
 
         List<NumericSequence> allSequences = sequenceService.listAllSequences();
         Assertions.assertThat(allSequences).containsExactlyInAnyOrder(s1, s2, s3);
@@ -136,7 +128,7 @@ public class RDBSequenceServiceTest {
         Assertions.assertThat(ns2Sequences).containsExactlyInAnyOrder(s3);
     }
 
-    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, long lastValue) {
+    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, short length, long max, String prefix, String suffix, String lastValue) {
         assertNotNull(sequence);
         assertEquals(lastValue, sequence.getLastValue(), "last value");
 
@@ -145,5 +137,9 @@ public class RDBSequenceServiceTest {
         assertEquals(namespace, sequenceDefinition.getNamespace(), "namespace");
         assertEquals(name, sequenceDefinition.getName(), "name");
         assertEquals(start, sequenceDefinition.getStart(), "start");
+        assertEquals(length, sequenceDefinition.getLength(), "length");
+        assertEquals(max, sequenceDefinition.getMax(), "max");
+        assertEquals(prefix, sequenceDefinition.getPrefix(), "prefix");
+        assertEquals(suffix, sequenceDefinition.getSuffix(), "suffix");
     }
 }

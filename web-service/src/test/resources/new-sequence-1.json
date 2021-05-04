@@ -2,7 +2,11 @@
   "sequenceDefinition": {
     "namespace": "test1",
     "name": "my-sequence",
-    "start": 10
+    "start": 10,
+    "length": 5,
+    "prefix": "INV",
+    "suffix": "-A",
+    "max": 999999
   },
-  "lastValue": 10
+  "lastValue": "INV00010-A"
 }

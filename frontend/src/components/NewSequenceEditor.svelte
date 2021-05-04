@@ -3,30 +3,44 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  let namespace = "";
-  let name = "";
-  let start = 1;
+  const empty = (): NumericSequenceDefinition => {
+    return {
+      name: "",
+      namespace: "",
+      start: 1,
+      length: null,
+      max: null,
+      prefix: null,
+      suffix: null,
+    };
+  };
+  let definition: NumericSequenceDefinition = empty();
 
   function onClick() {
-    dispatch("create", { name, namespace, start });
-    namespace = "";
-    name = "";
-    start = 1;
-    console.log(start);
+    dispatch("create", definition);
+    definition = empty();
   }
 
-  $: valid = namespace.length > 0 && name.length > 0 && start !== undefined && start !== null;
+  $: valid = definition.namespace.length > 0 && definition.name.length > 0 && definition.start !== undefined && definition.start !== null;
 </script>
 
-<div class="input-group fluid">
-  <label for="name">Name</label>
-  <input id="name" type="text" bind:value={name} />
-  <label for="namespace">Namespace</label>
-  <input id="namespace" type="text" bind:value={namespace} />
-  <label for="start">Start</label>
-  <input id="start" type="number" bind:value={start} />
-  <button class="add" on:click={onClick} disabled={!valid}>Add</button>
-</div>
+<form>
+  <div class="input-group fluid">
+    <label for="name">Name</label>
+    <input id="name" type="text" bind:value={definition.name} size="5" />
+    <label for="namespace">Namespace</label>
+    <input id="namespace" type="text" bind:value={definition.namespace} size="5" />
+    <label for="start">Start</label>
+    <input id="start" type="number" bind:value={definition.start} min="0" size="2" />
+    <label for="length">Length</label>
+    <input id="length" type="number" bind:value={definition.length} min="1" size="2" />
+    <label for="prefix">Prefix</label>
+    <input id="prefix" type="text" bind:value={definition.prefix} size="5" />
+    <label for="suffix">Suffix</label>
+    <input id="suffix" type="text" bind:value={definition.suffix} size="5" />
+    <button class="add" on:click={onClick} disabled={!valid}>Add</button>
+  </div>
+</form>
 
 <style>
 </style>

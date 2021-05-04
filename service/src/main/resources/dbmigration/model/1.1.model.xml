@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <addColumn tableName="dsequence_definition">
+            <column name="length" type="smallint"/>
+            <column name="max" type="bigint"/>
+            <column name="prefix" type="varchar"/>
+            <column name="suffix" type="varchar"/>
+        </addColumn>
+    </changeSet>
+</migration>

@@ -40,7 +40,8 @@ public class SequenceController {
     }
 
     @Get("{id}/next")
-    public long nextById(String id) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public String nextById(String id) {
         return service.increment(id);
     }
 
@@ -50,7 +51,8 @@ public class SequenceController {
     }
 
     @Get("{namespace}/{name}/next")
-    public long nextByName(String namespace, String name) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public String nextByName(String namespace, String name) {
         return service.increment(namespace, name);
     }
 

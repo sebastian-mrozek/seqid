@@ -1,5 +1,8 @@
 {
   "namespace": "test2",
   "name": "your-sequence",
-  "start": 2
+  "start": 1234,
+  "length": 8,
+  "prefix": "ON",
+  "suffix": "-A"
 }

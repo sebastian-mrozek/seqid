@@ -3,8 +3,9 @@
     "sequenceDefinition": {
       "namespace": "other6",
       "name": "b",
-      "start": 2
+      "start": 2,
+      "suffix": "-X"
     },
-    "lastValue": 2
+    "lastValue": "2-X"
   }
 ]

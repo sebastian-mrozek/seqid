@@ -9,10 +9,10 @@ public class NumericSequence {
 
     private final String id;
     private final NumericSequenceDefinition sequenceDefinition;
-    private final long lastValue;
+    private final String lastValue;
 
     @JsonCreator
-    public NumericSequence(@JsonProperty("id") String id, @JsonProperty("sequenceDefinition") NumericSequenceDefinition sequenceDefinition, @JsonProperty("lastValue") long lastValue) {
+    public NumericSequence(@JsonProperty("id") String id, @JsonProperty("sequenceDefinition") NumericSequenceDefinition sequenceDefinition, @JsonProperty("lastValue") String lastValue) {
         this.id = id;
         this.sequenceDefinition = sequenceDefinition;
         this.lastValue = lastValue;
@@ -26,7 +26,7 @@ public class NumericSequence {
         return sequenceDefinition;
     }
 
-    public long getLastValue() {
+    public String getLastValue() {
         return lastValue;
     }
 
@@ -35,7 +35,7 @@ public class NumericSequence {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NumericSequence that = (NumericSequence) o;
-        return lastValue == that.lastValue && id.equals(that.id) && sequenceDefinition.equals(that.sequenceDefinition);
+        return id.equals(that.id) && sequenceDefinition.equals(that.sequenceDefinition) && Objects.equals(lastValue, that.lastValue);
     }
 
     @Override

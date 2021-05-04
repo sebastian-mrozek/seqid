@@ -3,16 +3,18 @@
     "sequenceDefinition": {
       "namespace": "test6",
       "name": "a",
-      "start": 1
+      "start": 1,
+      "prefix": "ABC-"
     },
-    "lastValue": 1
+    "lastValue": "ABC-1"
   },
   {
     "sequenceDefinition": {
       "namespace": "test6",
       "name": "c",
-      "start": 3
+      "start": 3,
+      "length": 4
     },
-    "lastValue": 3
+    "lastValue": "0003"
   }
 ]

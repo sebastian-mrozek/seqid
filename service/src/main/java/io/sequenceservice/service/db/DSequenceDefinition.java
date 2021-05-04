@@ -26,10 +26,22 @@ public class DSequenceDefinition extends Model {
 
     long start;
 
-    public DSequenceDefinition(String namespace, String name, long start) {
+    Short length;
+
+    Long max;
+
+    String prefix;
+
+    String suffix;
+
+    public DSequenceDefinition(String namespace, String name, long start, Short length, Long max, String prefix, String suffix) {
         this.namespace = namespace;
         this.name = name;
         this.start = start;
+        this.length = length;
+        this.max = max;
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 
     public UUID getId() {
@@ -60,6 +72,38 @@ public class DSequenceDefinition extends Model {
         this.start = start;
     }
 
+    public Short getLength() {
+        return length;
+    }
+
+    public void setLength(Short length) {
+        this.length = length;
+    }
+
+    public Long getMax() {
+        return max;
+    }
+
+    public void setMax(Long max) {
+        this.max = max;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
     @Override
     public String toString() {
         return "DSequenceDefinition{" +
@@ -67,6 +111,10 @@ public class DSequenceDefinition extends Model {
                 ", namespace='" + namespace + '\'' +
                 ", name='" + name + '\'' +
                 ", start=" + start +
+                ", length=" + length +
+                ", max=" + max +
+                ", prefix='" + prefix + '\'' +
+                ", suffix='" + suffix + '\'' +
                 '}';
     }
 }

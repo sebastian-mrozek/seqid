@@ -1,5 +1,6 @@
 {
   "namespace": "test6",
   "name": "c",
-  "start": 3
+  "start": 3,
+  "length": 4
 }

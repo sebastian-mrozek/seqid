@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 public class RDBSequenceService implements ISequenceService {
 
     public static final Logger LOG = LoggerFactory.getLogger(RDBSequenceService.class);
@@ -44,15 +43,17 @@ public class RDBSequenceService implements ISequenceService {
     public NumericSequence createSequence(NumericSequenceDefinition sequenceDefinition) {
         DSequenceDefinition dbSequence = mapper.toDb(sequenceDefinition);
         dbSequence.save();
-        sequencer.create(dbSequence.getId(), dbSequence.getStart());
+        long start = dbSequence.getStart();
+        sequencer.create(dbSequence.getId(), start);
         LOG.info("Created new sequence: {}", sequenceDefinition);
-        return mapper.toApi(dbSequence, dbSequence.getStart());
+        return mapper.toApi(dbSequence, toSequenceString(dbSequence, start));
     }
 
     @Override
     public NumericSequence getSequence(String namespace, String name) {
         DSequenceDefinition dbSequence = findSequenceOrThrow(namespace, name);
-        NumericSequence numericSequence = mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        long current = sequencer.getCurrent(dbSequence.getId());
+        NumericSequence numericSequence = mapper.toApi(dbSequence, toSequenceString(dbSequence, current));
         LOG.debug("Retrieved sequence by name '{}@{}: {}", name, namespace, numericSequence);
         return numericSequence;
     }
@@ -60,9 +61,10 @@ public class RDBSequenceService implements ISequenceService {
     @Transactional
     @Override
     public NumericSequence resetSequence(String id) {
-        DSequenceDefinition dSequence = findSequenceOrThrow(id);
-        sequencer.reset(dSequence.getId(), dSequence.getStart());
-        NumericSequence numericSequence = mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        DSequenceDefinition dbSequence = findSequenceOrThrow(id);
+        sequencer.reset(dbSequence.getId(), dbSequence.getStart());
+        long current = sequencer.getCurrent(dbSequence.getId());
+        NumericSequence numericSequence = mapper.toApi(dbSequence, toSequenceString(dbSequence, current));
         LOG.info("Sequence id: '{}' reset: {}", id, numericSequence);
         return numericSequence;
     }
@@ -70,11 +72,12 @@ public class RDBSequenceService implements ISequenceService {
     @Transactional
     @Override
     public NumericSequence resetSequence(String id, long start) {
-        DSequenceDefinition dSequence = findSequenceOrThrow(id);
-        dSequence.setStart(start);
-        dSequence.update();
-        sequencer.reset(dSequence.getId(), start);
-        NumericSequence numericSequence = mapper.toApi(dSequence, sequencer.getCurrent(dSequence.getId()));
+        DSequenceDefinition dbSequence = findSequenceOrThrow(id);
+        dbSequence.setStart(start);
+        dbSequence.update();
+        sequencer.reset(dbSequence.getId(), start);
+        long current = sequencer.getCurrent(dbSequence.getId());
+        NumericSequence numericSequence = mapper.toApi(dbSequence, toSequenceString(dbSequence, current));
         LOG.info("Sequence id: '{}' reset: {}", id, numericSequence);
         return numericSequence;
     }
@@ -93,24 +96,26 @@ public class RDBSequenceService implements ISequenceService {
     @Override
     public NumericSequence getSequence(String id) {
         DSequenceDefinition dbSequence = findSequenceOrThrow(id);
-        NumericSequence numericSequence = mapper.toApi(dbSequence, sequencer.getCurrent(dbSequence.getId()));
+        long current = sequencer.getCurrent(dbSequence.getId());
+        NumericSequence numericSequence = mapper.toApi(dbSequence, toSequenceString(dbSequence, current));
         LOG.debug("Retrieved sequence by id: '{}': {}", id, numericSequence);
         return numericSequence;
     }
 
     @Override
-    public long increment(String namespace, String name) {
-        NumericSequence sequence = getSequence(namespace, name);
-        long value = increment(sequence.getId());
+    public String increment(String namespace, String name) {
+        DSequenceDefinition dbSequence = findSequenceOrThrow(namespace, name);
+        long value = sequencer.next(dbSequence.getId());
         LOG.trace("Sequence '{}@{}' incremented to: {}", name, namespace, value);
-        return value;
+        return toSequenceString(dbSequence, value);
     }
 
     @Override
-    public long increment(String id) {
+    public String increment(String id) {
+        DSequenceDefinition dbSequence = findSequenceOrThrow(id);
         long value = sequencer.next(UUID.fromString(id));
         LOG.trace("Sequence id: '{}' incremented to: {}", id, value);
-        return value;
+        return toSequenceString(dbSequence, value);
     }
 
     @Override
@@ -149,7 +154,7 @@ public class RDBSequenceService implements ISequenceService {
 
     private NumericSequence toFullSequenceDetails(DSequenceDefinition dSequenceDefinition) {
         long current = this.sequencer.getCurrent(dSequenceDefinition.getId());
-        return mapper.toApi(dSequenceDefinition, current);
+        return mapper.toApi(dSequenceDefinition, toSequenceString(dSequenceDefinition, current));
     }
 
     private DSequenceDefinition findSequenceOrThrow(String id) {
@@ -176,4 +181,25 @@ public class RDBSequenceService implements ISequenceService {
         return dbSequenceResult.get();
     }
 
+    private String toSequenceString(DSequenceDefinition definition, long value) {
+        StringBuilder builder = new StringBuilder();
+
+        if (definition.getPrefix() != null) {
+            builder.append(definition.getPrefix());
+        }
+
+        if (definition.getLength() != null) {
+            String valueString = String.format("%" + definition.getLength() + "d", value).replace(" ", "0");
+            builder.append(valueString);
+        } else {
+            builder.append(value);
+        }
+
+        if (definition.getSuffix() != null) {
+            builder.append(definition.getSuffix());
+        }
+
+        return builder.toString();
+
+    }
 }

@@ -6,7 +6,7 @@ plugins {
 group 'io.sequenceservice'
 version '1.0-SNAPSHOT'
 
-task copyFrontEndToBackend(type: Copy) {
+task buildAndCopyFrontEndToBackend(type: Copy) {
     doFirst {
         delete fileTree('web-service/src/main/resources/static')
     }
@@ -16,4 +16,4 @@ task copyFrontEndToBackend(type: Copy) {
     outputs.upToDateWhen { false }
 }
 
-task buildBackend(dependsOn: copyFrontEndToBackend)
+task buildBackend(dependsOn: buildAndCopyFrontEndToBackend)

@@ -1,6 +1,7 @@
 <script lang="ts">
   import SequenceListView from "./components/SequenceListView.svelte";
   import NewSequenceEditor from "./components/NewSequenceEditor.svelte";
+  import ActiveNotifications from "./components/ActiveNotifications.svelte";
   import type { NumericSequence, NumericSequenceDefinition } from "./model";
   import { sequenceService } from "./service";
 
@@ -50,6 +51,7 @@
 </script>
 
 <div class="header">
+  <ActiveNotifications />
   <div class="title">seqid</div>
   <div>
     <NewSequenceEditor on:create={createNew} />

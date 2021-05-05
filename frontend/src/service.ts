@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { NumericSequence, NumericSequenceDefinition } from "./model";
+import { notifications } from "./stores/app-state";
 
 interface SequenceService {
   getAll(onResolve: (data: NumericSequence[]) => void): void;
@@ -12,9 +13,19 @@ interface SequenceService {
 export const sequenceService: SequenceService = ((): SequenceService => {
   const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
 
-  function handleError(error) {
-    console.log(error);
+  type Action = "FETCH" | "CREATE" | "RESET" | "REMOVE" | "INCREMENT";
+
+  function createErrorHandler(action: Action, text?: string) {
+    return (error) => {
+      if (error.status === 400 && action === "CREATE") {
+        notifications.addError("Sequence with that name and namespace already exists");
+      } else {
+        notifications.addError(error.message);
+      }
+      console.log(error);
+    };
   }
+
   function log(response) {
     console.log(response);
   }
@@ -26,7 +37,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
         log(response);
         onSuccess(response.data);
       })
-      .catch(handleError);
+      .catch(createErrorHandler("FETCH"));
   }
 
   async function create(newSequenceDefinition: NumericSequenceDefinition, onSuccess: (newSequence: NumericSequence) => void) {
@@ -36,7 +47,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
         log(response);
         onSuccess(response.data);
       })
-      .catch(handleError);
+      .catch(createErrorHandler("CREATE"));
   }
   async function increment(id: string, onSuccess: (nextValue: number) => void) {
     restApiClient
@@ -45,7 +56,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
         log(response);
         onSuccess(response.data);
       })
-      .catch(handleError);
+      .catch(createErrorHandler("INCREMENT"));
   }
   async function reset(id: string, onSuccess: (updatedSequence: NumericSequence) => void) {
     restApiClient
@@ -54,7 +65,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
         log(response);
         onSuccess(response.data);
       })
-      .catch(handleError);
+      .catch(createErrorHandler("RESET"));
   }
 
   async function remove(id: string, onSuccess: () => void) {
@@ -64,7 +75,7 @@ export const sequenceService: SequenceService = ((): SequenceService => {
         log(response);
         onSuccess();
       })
-      .catch(handleError);
+      .catch(createErrorHandler("REMOVE"));
   }
   return {
     getAll,

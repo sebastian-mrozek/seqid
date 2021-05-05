@@ -39,13 +39,15 @@ curl -X DEL http://localhost:7000/sequence/{id}
 
 TODO
 ---
-- UI: Error handling via store (Show status)
+- UI: Complete error handling
+- display details and 'get next' url
 - make lastValue nullable when not initialized
 - allow sequence's name and namespace rename using PATCH
 - Add confirmation dialog for deleting and resetting
 - test config using external file
 - test H2 as service (potential caching issue with h2 on disk) - check h2 server mode
 - configure for postgres
+- refactor persistence to store JSON objects rather than a relational data 
 - USe JIB to create container
   - allow local file based h2 config
   - allow remote h2 and postgres config  

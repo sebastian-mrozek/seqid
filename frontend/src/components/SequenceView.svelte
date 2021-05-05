@@ -2,11 +2,12 @@
   import type { NumericSequence } from "../model";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+  import { blur } from "svelte/transition";
 
   export let sequence: NumericSequence;
 </script>
 
-<tr>
+<tr in:blur>
   <td data-label="Name @ Namespace">
     <span class="seq-name">{sequence.sequenceDefinition.name}</span>
     @

@@ -43,10 +43,10 @@ public class RDBSequenceService implements ISequenceService {
     public NumericSequence createSequence(NumericSequenceDefinition sequenceDefinition) {
         DSequenceDefinition dbSequence = mapper.toDb(sequenceDefinition);
         dbSequence.save();
-        long start = dbSequence.getStart();
-        sequencer.create(dbSequence.getId(), start);
+        sequencer.create(dbSequence.getId(), dbSequence.getStart());
         LOG.info("Created new sequence: {}", sequenceDefinition);
-        return mapper.toApi(dbSequence, toSequenceString(dbSequence, start));
+        long current = sequencer.getCurrent(dbSequence.getId());
+        return mapper.toApi(dbSequence, toSequenceString(dbSequence, current));
     }
 
     @Override
@@ -182,6 +182,10 @@ public class RDBSequenceService implements ISequenceService {
     }
 
     private String toSequenceString(DSequenceDefinition definition, long value) {
+        if (value < definition.getStart()) {
+            return null;
+        }
+
         StringBuilder builder = new StringBuilder();
 
         if (definition.getPrefix() != null) {

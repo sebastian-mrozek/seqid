@@ -6,7 +6,7 @@
       "start": 1,
       "prefix": "ABC-"
     },
-    "lastValue": "ABC-1"
+    "lastValue": null
   },
   {
     "sequenceDefinition": {
@@ -15,6 +15,6 @@
       "start": 3,
       "length": 4
     },
-    "lastValue": "0003"
+    "lastValue": null
   }
 ]

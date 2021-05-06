@@ -41,7 +41,6 @@ TODO
 ---
 - UI: Complete error handling
 - display details and 'get next' url
-- make lastValue nullable when not initialized
 - allow sequence's name and namespace rename using PATCH
 - Add confirmation dialog for deleting and resetting
 - test config using external file

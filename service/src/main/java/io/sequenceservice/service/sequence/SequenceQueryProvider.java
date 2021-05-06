@@ -56,7 +56,7 @@ public class SequenceQueryProvider {
                 "DROP SEQUENCE \"%s\";",
                 "SELECT NEXT VALUE FOR \"%s\";",
                 "SELECT CURRENT VALUE FOR \"%s\"",
-                "SELECT CURRENT_VALUE + INCREMENT FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_NAME='%s';");
+                "SELECT CURRENT_VALUE FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_NAME='%s';");
     }
 
     public static SequenceQueryProvider forPlatform(Platform platform) {

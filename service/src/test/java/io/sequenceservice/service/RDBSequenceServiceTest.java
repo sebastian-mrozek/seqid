@@ -27,17 +27,17 @@ public class RDBSequenceServiceTest {
     @Test
     public void testCreateAndGet() {
         NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK"));
-        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", "INV-005-OK");
+        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", null);
 
         sequence = sequenceService.getSequence("ns", "seq1");
-        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", "INV-005-OK");
+        assertSequence(sequence, "ns", "seq1", 5, (short) 3, Long.MAX_VALUE, "INV-", "-OK", null);
     }
 
     @Test
     public void testNext() {
         String id = sequenceService.createSequence(new NumericSequenceDefinition("ns2", "seq5", 11, (short) 3, 98989898989L, null, null)).getId();
 
-        AtomicReference<String> lastValue = new AtomicReference<>("011");
+        AtomicReference<String> lastValue = new AtomicReference<>(null);
         Stream.of("011", "012", "013", "014").forEach(expectedNext -> {
             NumericSequence sequence = sequenceService.getSequence(id);
             assertSequence(sequence, "ns2", "seq5", 11, (short) 3, 98989898989L, null, null, lastValue.get());
@@ -50,7 +50,7 @@ public class RDBSequenceServiceTest {
     @Test
     public void testDelete() {
         NumericSequence sequence = sequenceService.createSequence(new NumericSequenceDefinition("ns3", "seq123", 999, (short) 5, Long.MAX_VALUE, "O", "X"));
-        assertSequence(sequence, "ns3", "seq123", 999, (short) 5, Long.MAX_VALUE, "O", "X", "O00999X");
+        assertSequence(sequence, "ns3", "seq123", 999, (short) 5, Long.MAX_VALUE, "O", "X", null);
 
         sequenceService.deleteSequence(sequence.getId());
 
@@ -74,7 +74,7 @@ public class RDBSequenceServiceTest {
 
         sequenceService.resetSequence(id);
         NumericSequence sequence = sequenceService.getSequence(id);
-        assertEquals("A12345Z", sequence.getLastValue(), "last value");
+        assertNull(sequence.getLastValue(), "last value");
         assertEquals("A12345Z", sequenceService.increment(id), "incremented 1st time after reset");
     }
 
@@ -85,7 +85,7 @@ public class RDBSequenceServiceTest {
         sequenceService.resetSequence(id, 98765);
         NumericSequence sequence = sequenceService.getSequence(id);
         assertEquals(98765, sequence.getSequenceDefinition().getStart());
-        assertEquals("A98765Z", sequence.getLastValue(), "last value");
+        assertNull( sequence.getLastValue(), "last value");
         assertEquals("A98765Z", sequenceService.increment(id), "incremented 1st time");
         assertEquals("A98766Z", sequenceService.increment(id), "incremented 2nd time");
         assertEquals("A98767Z", sequenceService.increment(id), "incremented 3rd time");

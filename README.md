@@ -39,8 +39,7 @@ curl -X DEL http://localhost:7000/sequence/{id}
 
 TODO
 ---
-- UI: Complete error handling
-- display details and 'get next' url
+- UI: Complete error handling (error codes from the server?)
 - allow sequence's name and namespace rename using PATCH
 - Add confirmation dialog for deleting and resetting
 - test config using external file
@@ -49,10 +48,11 @@ TODO
 - refactor persistence to store JSON objects rather than a relational data 
 - USe JIB to create container
   - allow local file based h2 config
-  - allow remote h2 and postgres config  
+  - allow remote h2 and postgres config
+- graalvm - generate native image
 - host with the web service
 - UI: searching / filtering by namespace
-
+- fix layout on small screens
 
 Optional:
 - provide GraphQL API

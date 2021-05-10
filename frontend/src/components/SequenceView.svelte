@@ -78,8 +78,7 @@
     font-family: monospace;
   }
   .seq-value {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1.5em;
     font-family: monospace;
   }
 </style>

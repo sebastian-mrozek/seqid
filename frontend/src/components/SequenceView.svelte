@@ -59,6 +59,7 @@
   }
   .details {
     display: flex;
+    flex-wrap: wrap;
   }
   .seq-detail {
     margin: 0em 0.5em 0em 0.5em;

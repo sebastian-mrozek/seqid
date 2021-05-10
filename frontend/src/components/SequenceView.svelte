@@ -9,11 +9,34 @@
 
 <tr in:blur>
   <td data-label="Name @ Namespace">
-    <span class="seq-name">{sequence.sequenceDefinition.name}</span>
-    @
-    <span class="seq-ns">{sequence.sequenceDefinition.namespace}</span>
+    <div>
+      <span class="seq-name">{sequence.sequenceDefinition.name}</span>
+      @
+      <span class="seq-ns">{sequence.sequenceDefinition.namespace}</span>
+    </div>
+    <div class="seq-id">
+      <a href={`http://localhost:7000/sequence/${sequence.id}/next`}>Increment URL</a>
+    </div>
   </td>
-  <td data-label="Last Value">{sequence.lastValue ? sequence.lastValue : "not initialized"}</td>
+  <td class="details" data-label="Details">
+    <div class="seq-detail">
+      <div class="detail-label">start</div>
+      <div class="detail-value">{sequence.sequenceDefinition.start}</div>
+    </div>
+    <div class="seq-detail">
+      <div class="detail-label">length</div>
+      <div class="detail-value">{sequence.sequenceDefinition.length}</div>
+    </div>
+    <div class="seq-detail">
+      <div class="detail-label">prefix</div>
+      <div class="detail-value">{sequence.sequenceDefinition.prefix}</div>
+    </div>
+    <div class="seq-detail">
+      <div class="detail-label">suffix</div>
+      <div class="detail-value">{sequence.sequenceDefinition.suffix}</div>
+    </div>
+  </td>
+  <td data-label="Last Value" class="seq-value">{sequence.lastValue ? sequence.lastValue : "not initialized"}</td>
   <td data-label="Actions">
     <button class="rounded" on:click={(e) => dispatch("increment", sequence.id)}>increment</button>
     <button class="rounded" on:click={(e) => dispatch("reset", sequence.id)}>reset</button>
@@ -28,4 +51,32 @@
 </div>
 
 <style>
+  .seq-id {
+    font-size: 0.8em;
+    color: #555;
+  }
+  .details {
+    display: flex;
+  }
+  .seq-detail {
+    margin: 0 0.5em 0 0.5em;
+    padding: 0 1.5em 0 0.5em;
+    border-right: 1px solid #555;
+  }
+  .seq-detail:last-child {
+    border-right: 0px;
+  }
+
+  .detail-label {
+    font-size: 0.8em;
+    color: #555;
+  }
+  .detail-value {
+    font-family: monospace;
+  }
+  .seq-value {
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: monospace;
+  }
 </style>

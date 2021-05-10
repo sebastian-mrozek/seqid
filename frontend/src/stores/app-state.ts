@@ -27,7 +27,7 @@ export const notifications = (() => {
   };
 
   const addError = (text: string) => {
-    const id = "" + now() + Math.random();
+    const id = "" + Date.now() + Math.random();
     update((n) => [{ active: true, text, severity: "ERR", id }, ...n]);
     setTimeout(deactivate, 5000, id);
   };

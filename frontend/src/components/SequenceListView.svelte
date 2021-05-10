@@ -10,6 +10,7 @@
     <thead>
       <tr>
         <th>Name @ Namespace</th>
+        <th>Details</th>
         <th>Last Value</th>
         <th>Actions</th>
       </tr>

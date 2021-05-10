@@ -5,6 +5,8 @@
   import { blur } from "svelte/transition";
 
   export let sequence: NumericSequence;
+
+  const noneOrValue = (value: any) => (value === null ? "none" : value);
 </script>
 
 <tr in:blur>
@@ -24,16 +26,16 @@
       <div class="detail-value">{sequence.sequenceDefinition.start}</div>
     </div>
     <div class="seq-detail">
-      <div class="detail-label">length</div>
-      <div class="detail-value">{sequence.sequenceDefinition.length}</div>
+      <div class="detail-label">padding</div>
+      <div class="detail-value">{noneOrValue(sequence.sequenceDefinition.padding)}</div>
     </div>
     <div class="seq-detail">
       <div class="detail-label">prefix</div>
-      <div class="detail-value">{sequence.sequenceDefinition.prefix}</div>
+      <div class="detail-value">{noneOrValue(sequence.sequenceDefinition.prefix)}</div>
     </div>
     <div class="seq-detail">
       <div class="detail-label">suffix</div>
-      <div class="detail-value">{sequence.sequenceDefinition.suffix}</div>
+      <div class="detail-value">{noneOrValue(sequence.sequenceDefinition.suffix)}</div>
     </div>
   </td>
   <td data-label="Last Value" class="seq-value">{sequence.lastValue ? sequence.lastValue : "not initialized"}</td>
@@ -59,8 +61,8 @@
     display: flex;
   }
   .seq-detail {
-    margin: 0 0.5em 0 0.5em;
-    padding: 0 1.5em 0 0.5em;
+    margin: 0em 0.5em 0em 0.5em;
+    padding: 0em 1.5em 0em 0.5em;
     border-right: 1px solid #555;
   }
   .seq-detail:last-child {

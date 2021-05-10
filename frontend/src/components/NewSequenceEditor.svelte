@@ -8,7 +8,7 @@
       name: "",
       namespace: "",
       start: 1,
-      length: null,
+      padding: null,
       max: null,
       prefix: null,
       suffix: null,
@@ -31,8 +31,8 @@
   <input id="namespace" type="text" bind:value={definition.namespace} size="5" />
   <label for="start">Start</label>
   <input id="start" type="number" bind:value={definition.start} min="0" size="2" />
-  <label for="length">Length</label>
-  <input id="length" type="number" bind:value={definition.length} min="1" size="2" />
+  <label for="padding">Padding</label>
+  <input id="padding" type="number" bind:value={definition.padding} min="1" size="2" />
   <label for="prefix">Prefix</label>
   <input id="prefix" type="text" bind:value={definition.prefix} size="5" />
   <label for="suffix">Suffix</label>

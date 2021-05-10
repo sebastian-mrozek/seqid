@@ -13,7 +13,7 @@ public class SequenceMapper {
                 definition.getNamespace(),
                 definition.getName(),
                 definition.getStart(),
-                definition.getLength(),
+                definition.getPadding(),
                 definition.getMax(),
                 definition.getPrefix(),
                 definition.getSuffix());
@@ -28,7 +28,7 @@ public class SequenceMapper {
                 dbSequence.getNamespace(),
                 dbSequence.getName(),
                 dbSequence.getStart(),
-                dbSequence.getLength(),
+                dbSequence.getPadding(),
                 dbSequence.getMax(),
                 dbSequence.getPrefix(),
                 dbSequence.getSuffix());

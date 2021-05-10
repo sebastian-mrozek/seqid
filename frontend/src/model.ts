@@ -2,7 +2,7 @@ export type NumericSequenceDefinition = {
   namespace: string;
   name: string;
   start: number;
-  length: number;
+  padding: number;
   max: number;
   prefix: string;
   suffix: string;

@@ -192,8 +192,8 @@ public class RDBSequenceService implements ISequenceService {
             builder.append(definition.getPrefix());
         }
 
-        if (definition.getLength() != null) {
-            String valueString = String.format("%" + definition.getLength() + "d", value).replace(" ", "0");
+        if (definition.getPadding() != null) {
+            String valueString = String.format("%" + definition.getPadding() + "d", value).replace(" ", "0");
             builder.append(valueString);
         } else {
             builder.append(value);

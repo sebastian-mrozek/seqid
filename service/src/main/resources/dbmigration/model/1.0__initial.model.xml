@@ -6,6 +6,10 @@
             <column name="namespace" type="varchar(99)" notnull="true"/>
             <column name="name" type="varchar(99)" notnull="true"/>
             <column name="start" type="bigint" notnull="true"/>
+            <column name="padding" type="smallint"/>
+            <column name="max" type="bigint"/>
+            <column name="prefix" type="varchar"/>
+            <column name="suffix" type="varchar"/>
             <uniqueConstraint name="uq_dsequence_definition_namespace_name" columnNames="namespace,name" oneToOne="false" nullableColumns=""/>
         </createTable>
     </changeSet>

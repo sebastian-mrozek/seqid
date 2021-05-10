@@ -2,5 +2,5 @@
   "namespace": "test6",
   "name": "c",
   "start": 3,
-  "length": 4
+  "padding": 4
 }

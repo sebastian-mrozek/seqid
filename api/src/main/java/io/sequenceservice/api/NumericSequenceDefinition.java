@@ -10,7 +10,7 @@ public class NumericSequenceDefinition {
     private final String namespace;
     private final String name;
     private final long start;
-    private final Short length;
+    private final Short padding;
     private final Long max;
     private final String prefix;
     private final String suffix;
@@ -20,14 +20,14 @@ public class NumericSequenceDefinition {
             @JsonProperty("namespace") String namespace,
             @JsonProperty("name") String name,
             @JsonProperty("start") long start,
-            @JsonProperty("length") Short length,
+            @JsonProperty("padding") Short padding,
             @JsonProperty("max") Long max,
             @JsonProperty("prefix") String prefix,
             @JsonProperty("suffix") String suffix) {
         this.namespace = namespace;
         this.name = name;
         this.start = start;
-        this.length = length;
+        this.padding = padding;
         this.max = max;
         this.prefix = prefix;
         this.suffix = suffix;
@@ -45,8 +45,8 @@ public class NumericSequenceDefinition {
         return start;
     }
 
-    public Short getLength() {
-        return length;
+    public Short getPadding() {
+        return padding;
     }
 
     public Long getMax() {
@@ -67,13 +67,13 @@ public class NumericSequenceDefinition {
         if (o == null || getClass() != o.getClass()) return false;
         NumericSequenceDefinition that = (NumericSequenceDefinition) o;
         return start == that.start && namespace.equals(that.namespace) && name.equals(that.name) &&
-                Objects.equals(length, that.length) && Objects.equals(max, that.max) &&
+                Objects.equals(padding, that.padding) && Objects.equals(max, that.max) &&
                 Objects.equals(prefix, that.prefix) && Objects.equals(suffix, that.suffix);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(namespace, name, start, length, max, prefix, suffix);
+        return Objects.hash(namespace, name, start, padding, max, prefix, suffix);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NumericSequenceDefinition {
                 "namespace='" + namespace + '\'' +
                 ", name='" + name + '\'' +
                 ", start=" + start +
-                ", length=" + length +
+                ", padding=" + padding +
                 ", max=" + max +
                 ", prefix='" + prefix + '\'' +
                 ", suffix='" + suffix + '\'' +

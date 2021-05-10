@@ -2,7 +2,7 @@
   "namespace": "test2",
   "name": "your-sequence",
   "start": 1234,
-  "length": 8,
+  "padding": 8,
   "prefix": "ON",
   "suffix": "-A"
 }

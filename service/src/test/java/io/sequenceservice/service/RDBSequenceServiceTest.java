@@ -128,7 +128,7 @@ public class RDBSequenceServiceTest {
         Assertions.assertThat(ns2Sequences).containsExactlyInAnyOrder(s3);
     }
 
-    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, short length, long max, String prefix, String suffix, String lastValue) {
+    private void assertSequence(NumericSequence sequence, String namespace, String name, long start, short padding, long max, String prefix, String suffix, String lastValue) {
         assertNotNull(sequence);
         assertEquals(lastValue, sequence.getLastValue(), "last value");
 
@@ -137,7 +137,7 @@ public class RDBSequenceServiceTest {
         assertEquals(namespace, sequenceDefinition.getNamespace(), "namespace");
         assertEquals(name, sequenceDefinition.getName(), "name");
         assertEquals(start, sequenceDefinition.getStart(), "start");
-        assertEquals(length, sequenceDefinition.getLength(), "length");
+        assertEquals(padding, sequenceDefinition.getPadding(), "padding");
         assertEquals(max, sequenceDefinition.getMax(), "max");
         assertEquals(prefix, sequenceDefinition.getPrefix(), "prefix");
         assertEquals(suffix, sequenceDefinition.getSuffix(), "suffix");

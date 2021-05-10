@@ -26,7 +26,7 @@ public class DSequenceDefinition extends Model {
 
     long start;
 
-    Short length;
+    Short padding;
 
     Long max;
 
@@ -34,11 +34,11 @@ public class DSequenceDefinition extends Model {
 
     String suffix;
 
-    public DSequenceDefinition(String namespace, String name, long start, Short length, Long max, String prefix, String suffix) {
+    public DSequenceDefinition(String namespace, String name, long start, Short padding, Long max, String prefix, String suffix) {
         this.namespace = namespace;
         this.name = name;
         this.start = start;
-        this.length = length;
+        this.padding = padding;
         this.max = max;
         this.prefix = prefix;
         this.suffix = suffix;
@@ -72,12 +72,12 @@ public class DSequenceDefinition extends Model {
         this.start = start;
     }
 
-    public Short getLength() {
-        return length;
+    public Short getPadding() {
+        return padding;
     }
 
-    public void setLength(Short length) {
-        this.length = length;
+    public void setPadding(Short padding) {
+        this.padding = padding;
     }
 
     public Long getMax() {
@@ -111,7 +111,7 @@ public class DSequenceDefinition extends Model {
                 ", namespace='" + namespace + '\'' +
                 ", name='" + name + '\'' +
                 ", start=" + start +
-                ", length=" + length +
+                ", length=" + padding +
                 ", max=" + max +
                 ", prefix='" + prefix + '\'' +
                 ", suffix='" + suffix + '\'' +

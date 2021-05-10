@@ -43,7 +43,6 @@ TODO
 - allow sequence's name and namespace rename using PATCH
 - Add confirmation dialog for deleting and resetting
 - test config using external file
-- test H2 as service (potential caching issue with h2 on disk) - check h2 server mode
 - configure for postgres
 - refactor persistence to store JSON objects rather than a relational data 
 - USe JIB to create container

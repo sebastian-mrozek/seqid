@@ -1,6 +1,7 @@
 plugins {
     id 'idea'
     id 'java'
+    id 'com.google.cloud.tools.jib' version '3.0.0'
 }
 
 group 'io.sequenceservice'
@@ -42,4 +43,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jib {
+    to {
+        image = '$DOCKER_HUB_USER/seqid'
+        auth {
+            username = DOCKER_HUB_USER
+            password = DOCKER_HUB_TOKEN
+        }
+    }
 }

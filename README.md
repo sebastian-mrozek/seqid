@@ -4,7 +4,8 @@ Seqid is a service for providing unique strings that are part of a sequence.
 Many systems use sequences for things like: order numbers, customer numbers, invoice numbers.
 This project was born out of a need for managing unique numbers for an e2e test environment.
 Imagine the following scenario: the test framework is running tests in parallel and needs to emulate an external system sending data to the target system with a unique sequence number in a specific format.
-The numbers have to be unique across all test executions, and a few formats are required, depending on the test scenario flavour. 
+The numbers have to be unique across all test executions, and a couple of formats are required, depending on the test scenario flavour. 
+Seqid provides ability to manage sequences and increment the numbers in a multi-threaded env. 
 
 Each sequence is defined by name and namespace and consists of:
 - starting number
@@ -20,12 +21,17 @@ Examples of a formatted sequence with a name @ namespace:
 
 The service allows CRUD operations to define, list, delete and reset a sequence as well as incrementing the number and retrieving last value.
 Project provides a java service and a rest application. A docker image is published and usage examples are provided in `docker-compose` folder. 
-The rest application also serves a front-end with a UI allowing viewing and management of sequences.
+The rest application also serves a front-end with a UI allowing viewing and managing of sequences.
+
+![Front-end screenshot](front-end-screenshot.png)
 
 The project is also an example of how you can build a fast web application quickly with minimal dependencies.
 
-WARNING:
-The service is working well and have good test coverage but there is a few features missing, see TODO list at the end of this file.
+Production use
+---
+- The service is working well and have good test coverage but there is a few features missing, see TODO list at the end of this file.
+- There is no authentication (yet) as the service is likely to be running in an internal network, not exposed to public.
+- Embedded UI and H2 is obviously not going to work if horizontal scaling is required, however the database can be configured to use an external instance of H2 or postgres and the UI can be separated if required. 
 
 Tech stack
 ---
@@ -34,6 +40,7 @@ Tech stack
 - eBean for persistence and migrations
 - Javalin and avaje/http for easy REST endpoints
 - Svelte for front-end
+- jib for creating docker images
 
 Running the service
 ---
@@ -51,7 +58,10 @@ The folder `docker-compose` contains 2 files with examples of docker configurati
    docker compose -f external-postgres.yml --env-file .env.local up
    ```
 
+TODO: provide examples for Kubernetes.
+
 If you prefer to embed the service in your application, just use the java service (`service` project) and configure the db (see examples of configuration in the `application.yaml` in `main` and `test` resources in the `web-service` project).
+No maven artefacts are published yet.
 
 Sample curl commands
 ---
@@ -93,6 +103,7 @@ curl -X DEL http://localhost:7000/sequence/{id}
 
 TODO
 ---
+- DEV: setup containerised build process
 - BUG: prevent padding length that would exceed max number allowed in a sequence
 - BUG: decide what to do when sequence reaches max (document what max is for each db platform)
 - DOC: provide description for docker image

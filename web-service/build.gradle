@@ -34,6 +34,7 @@ dependencies {
     implementation "io.ebean:ebean:$v_ebean"
     implementation "io.ebean:ebean-migration:$v_ebean_migration"
     implementation "com.h2database:h2:1.4.200"
+    implementation "org.postgresql:postgresql:42.2.20"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$v_junit"
     testImplementation "com.konghq:unirest-java:3.11.09"
@@ -47,10 +48,11 @@ test {
 
 jib {
     to {
-        image = '$DOCKER_HUB_USER/seqid'
+        image = "$DOCKER_HUB_USER/seqid"
         auth {
             username = DOCKER_HUB_USER
             password = DOCKER_HUB_TOKEN
         }
     }
 }
+

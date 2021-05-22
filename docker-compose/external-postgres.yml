@@ -1,0 +1,9 @@
+services:
+  seqid-service-postgres:
+    image: softwaremrozek/seqid:latest
+    ports:
+      - 7000:7000
+    environment:
+      - DB_URL=jdbc:postgresql://192.168.20.19:5432/postgres?currentSchema=seqid
+      - DB_USER=postgres
+      - DB_PASS=${DB_PASS}

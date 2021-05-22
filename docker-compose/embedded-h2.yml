@@ -1,0 +1,9 @@
+services:
+  seqid-service-h2:
+    image: softwaremrozek/seqid:latest
+    ports:
+      - 7000:7000
+    volumes:
+      - type: bind
+        source: ./db
+        target: /db

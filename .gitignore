@@ -7,3 +7,4 @@ sequencedb.*.db
 */src/main/generated/*
 frontend/public
 web-service/src/main/resources/static
+docker-compose/.env.local

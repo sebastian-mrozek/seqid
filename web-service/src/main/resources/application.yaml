@@ -5,4 +5,4 @@ datasource:
   db:
     username: ${DB_USER:sa}
     password: ${DB_PASS:sa}
-    url: ${DB_URL:jdbc:h2:./sequencedb}
+    url: ${DB_URL:jdbc:h2:./db/sequencedb}

@@ -40,6 +40,15 @@ Run as a docker container (data will not be persisted between container restarts
 ```
 docker run --publish 7000:7000 softwaremrozek/seqid
 ```
+The folder `docker-compose` contains 2 files with examples of docker configuration:
+1. Service using an embedded h2 database with a local `db` folder bound to the db folder inside docker container where h2 database files will be stored.
+   ```
+   docker compose -f embedded-h2.yml up
+   ```
+2. Service using an external postgres with password defined in an environment variable `DB_PASS` (below supplied via `.env.local` file, not committed) 
+   ```
+   docker compose -f external-postgres.yml --env-file .env.local up
+   ```
 
 TODO
 ---

@@ -35,6 +35,7 @@ Production use
 
 Tech stack
 ---
+- Gradle
 - Java 11
 - Jackson for everything JSON
 - eBean for persistence and migrations
@@ -44,10 +45,16 @@ Tech stack
 
 Running the service
 ---
+*Run using Docker*
+
 The service can be run using docker:
 ```
 docker run --publish 7000:7000 softwaremrozek/seqid
 ```
+Beware that above will create a local h2 instance within the container and will not persist your data if container is deleted.
+
+*Run using docker-compose*
+
 The folder `docker-compose` contains 2 files with examples of docker configuration:
 1. Service using an embedded h2 database with a local `db` folder bound to the db folder inside docker container where h2 database files will be stored.
    ```
@@ -57,11 +64,20 @@ The folder `docker-compose` contains 2 files with examples of docker configurati
    ```
    docker compose -f external-postgres.yml --env-file .env.local up
    ```
+*Run using Kubernetes*
 
-TODO: provide examples for Kubernetes.
+The following 2 commands allow to quickly deploy the service in Kubernetes. This is not how a production setup would look like though.
+```
+kubectl create deployment seqid --image=softwaremrozek/seqid
+kubectl expose deploy seqid --port=7000 --target-port=7000 --name=seqid --type=NodePort
+```
+
+TODO: provide production grade example of running service in k8s, with volume claim for local h2 and external postgres variant.
 
 If you prefer to embed the service in your application, just use the java service (`service` project) and configure the db (see examples of configuration in the `application.yaml` in `main` and `test` resources in the `web-service` project).
 No maven artefacts are published yet.
+
+TODO: publish plain Java variant as a maven artefact, provide usage and configuration examples.
 
 Sample curl commands
 ---
@@ -104,6 +120,7 @@ curl -X DEL http://localhost:7000/sequence/{id}
 TODO
 ---
 - DEV: setup containerised build process
+- OPS: expand k8s examples
 - BUG: prevent padding length that would exceed max number allowed in a sequence
 - BUG: decide what to do when sequence reaches max (document what max is for each db platform)
 - DOC: provide description for docker image
@@ -118,6 +135,7 @@ TODO
 - DEV: refactor persistence to store JSON objects rather than relational data 
 - OPS: graalvm - generate native image
 - OPS: host in the cloud
+- DEV: publish plain Java service as a maven artefact
 
 Optional:
 - OPS: provide GraphQL API

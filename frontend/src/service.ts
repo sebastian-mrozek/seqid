@@ -11,7 +11,8 @@ interface SequenceService {
 }
 
 export const sequenceService: SequenceService = ((): SequenceService => {
-  const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
+//   const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
+  const restApiClient = axios.create({ baseURL: "sequence" });
 
   type Action = "FETCH" | "CREATE" | "RESET" | "REMOVE" | "INCREMENT";
 

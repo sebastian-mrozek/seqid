@@ -2,6 +2,6 @@ ebean:
   dumpMetricsOnShutdown: true
   dumpMetricsOptions: loc,sql,hash #hash,sql,loc
   test:
-    platform: h2 # h2, postgres, mysql, oracle, sqlserver, sqlite
+    platform: postgres # h2, postgres, mysql, oracle, sqlserver, sqlite
     ddlMode: dropCreate # none | dropCreate | create | migration | createOnly | migrationDropCreate
     dbName: sequenceservice

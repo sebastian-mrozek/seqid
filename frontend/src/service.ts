@@ -3,7 +3,7 @@ import type { NumericSequence, NumericSequenceDefinition } from "./model";
 import { notifications } from "./stores/app-state";
 
 interface SequenceService {
-  getAll(onResolve: (data: NumericSequence[]) => void): void;
+  getAll(onSuccess: (data: NumericSequence[]) => void): void;
   create(newSequenceDefinition: NumericSequenceDefinition, onSuccess: (newSequence: NumericSequence) => void): void;
   increment(id: string, onSuccess: (nextValue: number) => void): void;
   reset(id: string, onSuccess: (updatedSequence: NumericSequence) => void): void;
@@ -11,7 +11,7 @@ interface SequenceService {
 }
 
 export const sequenceService: SequenceService = ((): SequenceService => {
-//   const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
+  //   const restApiClient = axios.create({ baseURL: "http://localhost:7000/sequence" });
   const restApiClient = axios.create({ baseURL: "sequence" });
 
   type Action = "FETCH" | "CREATE" | "RESET" | "REMOVE" | "INCREMENT";
